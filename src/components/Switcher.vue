@@ -10,31 +10,27 @@
 
 <script>
 export default {
-  name: "PickerSwitch",
+  name: 'Switcher',
   props: {
     mode: {
       type: String,
-      required: false,
-      default: 'date',
-      validator: val => ['year', 'month', 'date'].some(i => i === val)
+      required: true
     },
     year: {
       type: Number,
-      required: false,
-      default: 2019
+      required: true
     },
     month: {
       type: String,
-      required: false,
-      default: 'December'
+      required: true
     }
   },
   methods: {
     goBack() {
-      this.$emit("back");
+      this.$emit('back');
     },
     goForward() {
-      this.$emit("forward");
+      this.$emit('forward');
     },
     toggleMode() {
       this.$emit('toggleMode');

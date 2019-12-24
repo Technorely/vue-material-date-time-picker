@@ -32,8 +32,10 @@
 </template>
 
 <script>
+import { MODE } from '../constants';
+
 export default {
-  name: 'PickerBodyClock',
+  name: 'Time',
   props: {
     isPm: {
       type: Boolean,
@@ -45,6 +47,7 @@ export default {
     }
   },
   data: () => ({
+    MODE,
     isPressed: false,
     XC: null,
     YC: null,
@@ -91,7 +94,7 @@ export default {
     handleMouseUp() {
       this.isPressed = false;
       if (this.isHourMode) {
-        this.$emit('mode', 4);
+        this.$emit('mode', this.MODE.MINUTE);
       }
     },
     handleMouseMove(event) {
@@ -129,7 +132,7 @@ export default {
   },
   computed: {
     isHourMode() {
-      return this.mode === 3;
+      return this.mode === this.MODE.HOUR;
     },
     clockItems() {
       if (this.isHourMode) {

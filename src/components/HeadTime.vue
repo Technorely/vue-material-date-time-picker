@@ -1,15 +1,17 @@
 <template>
   <div class="header">
-    <span class="text text--pointer" @click="$emit('modeUpdate', 3)">{{ hour }}</span>
+    <span class="text text--pointer" @click="$emit('modeUpdate', MODE.HOUR)">{{ hour }}</span>
     <span class="text">:</span>
-    <span class="text text--pointer" @click="$emit('modeUpdate', 4)">{{ minute }}</span>
-    <span class="text text--sm">{{ pmAm }}</span>
+    <span class="text text--pointer" @click="$emit('modeUpdate', MODE.MINUTE)">{{ minute }}</span>
+    <span class="text text--sm">{{ pmOrAm }}</span>
   </div>
 </template>
 
 <script>
+import { MODE } from '../constants';
+
 export default {
-  name: 'PickerHeaderTime',
+  name: 'HeadTime',
   props: {
     hours: {
       type: Number | Object,
@@ -24,6 +26,9 @@ export default {
       required: true
     }
   },
+  data: () => ({
+    MODE
+  }),
   computed: {
     hour() {
       return this.hours !== null ? this.hours : '--';
@@ -33,7 +38,7 @@ export default {
       if (Number.isInteger(minutes) && minutes < 10) minutes = `0${minutes}`;
       return minutes;
     },
-    pmAm() {
+    pmOrAm() {
       return this.isPm ? 'PM' : 'AM';
     }
   }

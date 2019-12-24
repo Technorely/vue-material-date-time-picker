@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name: "PickerBodyYear",
+  name: 'Year',
   props: {
     yearRange: {
       required: false,

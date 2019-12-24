@@ -2,22 +2,22 @@
   <div class="body">
     <ul class="head">
       <li
-        v-for="(date, index) in name"
-        :key="`${date}-${index}`"
+        v-for="(day, index) in name"
+        :key="`${day}-${index}`"
         class="head__item"
       >
-        {{ date }}
+        {{ day }}
       </li>
     </ul>
     <ul class="main">
       <li
-        v-for="(date, index) in dates"
-        :key="`${date}-${index}`"
+        v-for="(day, index) in days"
+        :key="`${day}-${index}`"
         class="main__item"
-        @click="handleClick(date)"
+        @click="handleClick(day)"
       >
-        <span :class="{ selected: (date === selectedDate)}">
-          {{ date }}
+        <span :class="{ selected: (day === selectedDay)}">
+          {{ day }}
         </span>
       </li>
     </ul>
@@ -26,39 +26,35 @@
 
 <script>
 export default {
-	name: 'PickerBodyDate',
+	name: 'Day',
   props: {
 	  name: {
 	    type: Array,
-      required: false,
-      default: () => (['S', 'M', 'T', 'W', 'T', 'F', 'S'])
+      required: true
     },
     number: {
 	    type: Number,
-      required: false,
-      default: 31
+      required: true
     },
     position: {
 	    type: Number,
-      required: false,
-      default: 0
+      required: true
     },
-    selectedDate: {
+    selectedDay: {
 	    type: Number,
-      required: false,
-      default: 15
+      required: true
     }
   },
   methods: {
-    handleClick(date) {
-      this.$emit('date', date);
+    handleClick(day) {
+      this.$emit('day', day);
     }
   },
   computed: {
-	  dates() {
-	    const prevMonthDates = new Array(this.position).fill(null);
-	    const monthDates = Array.from({length: this.number}, (v, k) => k+1);
-      return [...prevMonthDates, ...monthDates];
+	  days() {
+	    const prevMonthDays = new Array(this.position).fill(null);
+	    const monthDays = Array.from({length: this.number}, (v, k) => k+1);
+      return [...prevMonthDays, ...monthDays];
     }
   }
 };

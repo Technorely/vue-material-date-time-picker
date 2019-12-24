@@ -7,27 +7,23 @@
 
 <script>
 export default {
-  name: 'PickerHeader',
+  name: 'HeadDate',
   props: {
     year: {
       type: Number,
-      required: false,
-      default: 2019
+      required: true
     },
     date: {
       type: Number,
-      required: false,
-      default: 21
+      required: true
     },
     month: {
       type: String,
-      required: false,
-      default: 'December',
+      required: true
     },
     weekDay: {
       type: String,
-      required: false,
-      default: 'Saturday'
+      required: true
     }
   },
   computed: {

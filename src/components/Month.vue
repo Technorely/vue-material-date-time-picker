@@ -16,7 +16,7 @@
 
 <script>
 export default {
-	name: 'PickerBodyMonth',
+	name: 'Month',
   props: {
 	  name: {
 	    type: Object,

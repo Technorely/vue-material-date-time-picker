@@ -49,8 +49,8 @@
         :number="daysInMonth"
         :position="firstDayOfMonthPosition"
         :name="weekDaysShortNamesSet"
-        :selected-date="date"
-        @date="setDate"
+        :selected-day="date"
+        @day="setDay"
       />
       <Time
         v-else
@@ -154,7 +154,7 @@ export default {
       const d = new Date(this.todayStamp.getFullYear(), this.todayStamp.getMonth() + 1, 0);
       return d.getDate();
     },
-    setDate(date) {
+    setDay(date) {
       this.date = date;
     },
     setMonth(month) {

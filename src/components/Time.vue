@@ -62,7 +62,8 @@ export default {
         this.$emit('hour', this.hours);
       }
       if (!this.isHourMode) {
-        this.minutes = Math.floor(v / 6);
+        const rounded = Math.round(v / 6);
+        this.minutes = rounded !== 60 ? rounded : 59;
         this.$emit('minute', this.minutes);
       }
     },

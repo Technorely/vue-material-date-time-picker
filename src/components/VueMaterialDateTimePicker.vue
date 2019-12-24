@@ -156,13 +156,6 @@ export default {
     },
     setDate(date) {
       this.date = date;
-      if (this.isDateOnly) {
-        const date = new Date(this.year, this.month, this.date);
-        console.log('Date is selected: ', date);
-        console.log('CLOSE');
-      } else {
-
-      }
     },
     setMonth(month) {
       this.month = month;

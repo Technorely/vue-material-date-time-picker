@@ -10,21 +10,21 @@
 <template>
   <div class="wrap">
     <div class="picker">
-      <PickerHeaderDate
+      <HeadDate
         v-if="mode < 3"
         :year="year"
         :month="MONTH_SET[month]"
         :week-day="WEEK_SET[day]"
         :date="date"
       />
-      <PickerHeaderTime
+      <HeadTime
         v-else
         :hours="hour"
         :minutes="minute"
         :is-pm="pm"
         @modeUpdate="handleModeUpdateFromTimeHeader"
       />
-      <PickerSwitch
+      <Switcher
         v-if="mode === 1 || mode === 2"
         :mode="MODE_SET[mode]"
         :month="MONTH_SET[month]"
@@ -33,18 +33,18 @@
         @back="handleSwitchBack"
         @forward="handleSwitchForward"
       />
-      <PickerBodyYear
+      <Year
         v-if="mode === 0"
         :selected-year="year"
         @year="setYear"
       />
-      <PickerBodyMonth
+      <Month
         v-else-if="mode === 1"
         :name="MONTH_SET"
         :selected-moth="month"
         @month="setMonth"
       />
-      <PickerBodyDate
+      <Day
         v-else-if="mode === 2"
         :number="daysInMonth"
         :position="firstDayOfMonthPosition"
@@ -52,7 +52,7 @@
         :selected-date="date"
         @date="setDate"
       />
-      <PickerBodyClock
+      <Time
         v-else
         :mode="mode"
         :is-pm="pm"
@@ -62,7 +62,7 @@
         @pm="setPmState"
         @update-can-finish="handleUpdateCanFinish"
       />
-      <PickerButtons
+      <Buttons
         v-if="mode >= 2"
         :mode="mode"
         :can-finish="canFinish"
@@ -75,26 +75,26 @@
 </template>
 
 <script>
-import PickerHeaderDate from './PickerHeaderDate.vue';
-import PickerSwitch from './PickerSwitch.vue';
-import PickerBodyYear from './PickerBodyYear.vue';
-import PickerBodyMonth from './PickerBodyMonth.vue';
-import PickerBodyDate from './PickerBodyDate.vue';
-import PickerBodyClock from './PickerBodyClock.vue';
-import PickerHeaderTime from './PickerHeaderTime.vue';
-import PickerButtons from './PickerButtons.vue';
+import HeadDate from './HeadDate.vue';
+import Switcher from './Switcher.vue';
+import Year from './Year.vue';
+import Month from './Month.vue';
+import Day from './Day.vue';
+import Time from './Time.vue';
+import HeadTime from './HeadTime.vue';
+import Buttons from './Buttons.vue';
 
 export default {
   name: 'Picker',
   components: {
-    PickerButtons,
-    PickerHeaderTime,
-    PickerBodyClock,
-    PickerBodyDate,
-    PickerBodyMonth,
-    PickerHeaderDate,
-    PickerSwitch,
-    PickerBodyYear
+    Buttons,
+    HeadTime,
+    Time,
+    Day,
+    Month,
+    HeadDate,
+    Switcher,
+    Year
   },
   props: {
     isDateOnly: {

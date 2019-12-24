@@ -70,7 +70,7 @@ export default {
       immediate: true,
       handler(v) {
         const areHoursSet = v !== null;
-        const areMinutesSet = v !== null;
+        const areMinutesSet = this.minutes !== null;
         return (areHoursSet && areMinutesSet)
           ? this.$emit('update-can-finish', true)
           : this.$emit('update-can-finish', false);
@@ -79,7 +79,7 @@ export default {
     minutes: {
       immediate: true,
       handler(v) {
-        const areHoursSet = v !== null;
+        const areHoursSet = this.hours !== null;
         const areMinutesSet = v !== null;
         return (areHoursSet && areMinutesSet)
           ? this.$emit('update-can-finish', true)

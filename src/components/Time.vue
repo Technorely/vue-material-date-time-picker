@@ -67,6 +67,10 @@ export default {
         this.$emit('minute', this.minutes);
       }
     },
+    mode(v) {
+      if (v === 3) this.degree = this.hours * 30;
+      if (v === 4) this.degree = this.minutes * 6;
+    },
     hours: {
       immediate: true,
       handler(v) {
@@ -89,13 +93,17 @@ export default {
     }
   },
   methods: {
-    handleMouseDown() {
+    handleMouseDown(event) {
       this.isPressed = true;
+      this.XC = event.offsetX;
+      this.YC = event.offsetY;
+      this.calculateDeg();
     },
     handleMouseUp() {
       this.isPressed = false;
       if (this.isHourMode) {
         this.$emit('mode', this.MODE.MINUTE);
+        this.degree = 0;
       }
     },
     handleMouseMove(event) {
@@ -252,15 +260,18 @@ export default {
   position: absolute;
   z-index: 1;
   bottom: 0;
-  background-color: transparent;
   border: none;
-  opacity: 0.6;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   line-height: 22px;
-  font-weight: 400;
-  color: $c-blue;
+  font-weight: 600;
+  color: $c-black;
+  background-color: rgba($c-gray, 0.75);
+
   outline: none;
   &--left {
     left: 0;
@@ -269,7 +280,8 @@ export default {
     right: 0;
   }
   &.active {
-    opacity: 1;
+    background-color: $c-blue;
+    color: $c-white;
   }
 }
 </style>

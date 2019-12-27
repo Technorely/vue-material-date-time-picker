@@ -60,6 +60,20 @@ export default {
 .body {
   height: 290px;
   overflow: auto;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgba($c-black, 0.25);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $c-blue;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: darken($c-blue, 20%);
+  }
 }
 
 .list {

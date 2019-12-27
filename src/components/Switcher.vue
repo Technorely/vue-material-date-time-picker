@@ -26,17 +26,17 @@ export default {
     }
   },
   methods: {
-    goBack() {
-      this.$emit('back');
+    goBack () {
+      this.$emit('back')
     },
-    goForward() {
-      this.$emit('forward');
+    goForward () {
+      this.$emit('forward')
     },
-    toggleMode() {
-      this.$emit('toggleMode');
+    toggleMode () {
+      this.$emit('toggleMode')
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

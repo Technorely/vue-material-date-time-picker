@@ -22,14 +22,14 @@ export default {
     yearRange: {
       required: false,
       default: () => {
-        const currentYear = new Date().getFullYear();
-        const range = 100;
-        const minYear = currentYear - range;
-        const yearsRange = [];
+        const currentYear = new Date().getFullYear()
+        const range = 100
+        const minYear = currentYear - range
+        const yearsRange = []
         for (let i = minYear; i <= minYear + range * 2; i++) {
-          yearsRange.push(i);
+          yearsRange.push(i)
         }
-        return yearsRange;
+        return yearsRange
       }
     },
     selectedYear: {
@@ -38,20 +38,20 @@ export default {
     }
   },
   methods: {
-    handleClick(year) {
-      this.$emit('year', year);
-      this.scroll();
+    handleClick (year) {
+      this.$emit('year', year)
+      this.scroll()
     },
-    scroll() {
-      const pointYear = this.selectedYear - 3;
-      const selectedYearElement = this.$refs[`${pointYear}-year`][0];
-      selectedYearElement.scrollIntoView({ behavior: 'auto' });
+    scroll () {
+      const pointYear = this.selectedYear - 3
+      const selectedYearElement = this.$refs[`${pointYear}-year`][0]
+      selectedYearElement.scrollIntoView({ behavior: 'auto' })
     }
   },
-  mounted() {
-    this.scroll();
+  mounted () {
+    this.scroll()
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

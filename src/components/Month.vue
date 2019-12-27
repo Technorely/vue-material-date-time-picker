@@ -16,28 +16,28 @@
 
 <script>
 export default {
-	name: 'Month',
+  name: 'Month',
   props: {
-	  name: {
-	    type: Object,
+    name: {
+      type: Object,
       required: true
     },
     selectedMoth: {
-	    type: Number,
+      type: Number,
       required: true
     }
   },
   methods: {
-    handleClick(month) {
-      this.$emit('month', month);
+    handleClick (month) {
+      this.$emit('month', month)
     }
   },
   computed: {
-	  months() {
-	    return Object.values(this.name).map(i => i.substring(0, 3));
+    months () {
+      return Object.values(this.name).map(i => i.substring(0, 3))
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

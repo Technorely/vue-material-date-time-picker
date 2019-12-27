@@ -19,3 +19,13 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+npm-debug.log
+.vscode
+.coveralls.yml
+dist/*
+example/demo.js
+example/demo.js.map
+test/unit/coverage
+yarn.lock
+TODO

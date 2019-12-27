@@ -4,4 +4,4 @@ export const MODE = {
   DATE: 2,
   HOUR: 3,
   MINUTE: 4
-};
+}

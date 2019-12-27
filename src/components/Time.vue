@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { MODE } from '../constants';
+import { MODE } from '../constants'
 
 export default {
   name: 'Time',
@@ -56,100 +56,100 @@ export default {
     minutes: null
   }),
   watch: {
-    degree(v) {
+    degree (v) {
       if (this.isHourMode) {
-        this.hours = Math.floor(v / 30);
-        this.$emit('hour', this.hours);
+        this.hours = Math.floor(v / 30)
+        this.$emit('hour', this.hours)
       }
       if (!this.isHourMode) {
-        const rounded = Math.round(v / 6);
-        this.minutes = rounded !== 60 ? rounded : 59;
-        this.$emit('minute', this.minutes);
+        const rounded = Math.round(v / 6)
+        this.minutes = rounded !== 60 ? rounded : 59
+        this.$emit('minute', this.minutes)
       }
     },
-    mode(v) {
-      if (v === 3) this.degree = this.hours * 30;
-      if (v === 4) this.degree = this.minutes * 6;
+    mode (v) {
+      if (v === 3) this.degree = this.hours * 30
+      if (v === 4) this.degree = this.minutes * 6
     },
     hours: {
       immediate: true,
-      handler(v) {
-        const areHoursSet = v !== null;
-        const areMinutesSet = this.minutes !== null;
+      handler (v) {
+        const areHoursSet = v !== null
+        const areMinutesSet = this.minutes !== null
         return (areHoursSet && areMinutesSet)
           ? this.$emit('update-can-finish', true)
-          : this.$emit('update-can-finish', false);
+          : this.$emit('update-can-finish', false)
       }
     },
     minutes: {
       immediate: true,
-      handler(v) {
-        const areHoursSet = this.hours !== null;
-        const areMinutesSet = v !== null;
+      handler (v) {
+        const areHoursSet = this.hours !== null
+        const areMinutesSet = v !== null
         return (areHoursSet && areMinutesSet)
           ? this.$emit('update-can-finish', true)
-          : this.$emit('update-can-finish', false);
+          : this.$emit('update-can-finish', false)
       }
     }
   },
   methods: {
-    handleMouseDown(event) {
-      this.isPressed = true;
-      this.XC = event.offsetX;
-      this.YC = event.offsetY;
-      this.calculateDeg();
+    handleMouseDown (event) {
+      this.isPressed = true
+      this.XC = event.offsetX
+      this.YC = event.offsetY
+      this.calculateDeg()
     },
-    handleMouseUp() {
-      this.isPressed = false;
+    handleMouseUp () {
+      this.isPressed = false
       if (this.isHourMode) {
-        this.$emit('mode', this.MODE.MINUTE);
-        this.degree = 0;
+        this.$emit('mode', this.MODE.MINUTE)
+        this.degree = 0
       }
     },
-    handleMouseMove(event) {
+    handleMouseMove (event) {
       if (this.isPressed) {
-        this.XC = event.offsetX;
-        this.YC = event.offsetY;
-        this.calculateDeg();
+        this.XC = event.offsetX
+        this.YC = event.offsetY
+        this.calculateDeg()
       }
     },
-    handlePmChange(mode) {
-      this.$emit('pm', mode);
-      this.$emit('hour', this.hours);
+    handlePmChange (mode) {
+      this.$emit('pm', mode)
+      this.$emit('hour', this.hours)
     },
-    calculateDeg() {
-      const XA = 125;
-      const YA = 125;
-      const XB = 125;
-      const YB = 0;
-      const XC = this.XC;
-      const YC = this.YC;
-      const vector_AB = [XB - XA, YB - YA];
-      const vector_AC = [XC - XA, YC - YA];
-      const fractionUpperPart = (vector_AB[0] * vector_AC[0]) + (vector_AB[1] * vector_AC[1]);
-      const fractionLowerPart_0 = Math.pow(vector_AB[0], 2) + Math.pow(vector_AB[1], 2);
-      const fractionLowerPart_1 = Math.pow(vector_AC[0], 2) + Math.pow(vector_AC[1], 2);
-      const fractionLowerPart = Math.sqrt(fractionLowerPart_0) * Math.sqrt(fractionLowerPart_1);
-      const arcCosARadians = Math.acos(fractionUpperPart / fractionLowerPart);
-      const xRight = XC >=0 && XC < 125;
-      const xLeft = XC >= 125 && XC <= 250;
-      const yTop = YC >= 0 && YC < 125;
-      const yBottom = YC >= 125 && YC <= 250;
-      if (xLeft && (yTop || yBottom)) this.degree = Math.floor((180 / Math.PI) * arcCosARadians);
-      if (xRight && (yTop || yBottom)) this.degree = 360 - Math.floor((180 / Math.PI) * arcCosARadians);
+    calculateDeg () {
+      const XA = 125
+      const YA = 125
+      const XB = 125
+      const YB = 0
+      const XC = this.XC
+      const YC = this.YC
+      const vectorAB = [XB - XA, YB - YA]
+      const vectorAC = [XC - XA, YC - YA]
+      const fractionUpperPart = (vectorAB[0] * vectorAC[0]) + (vectorAB[1] * vectorAC[1])
+      const fractionLowerPart0 = Math.pow(vectorAB[0], 2) + Math.pow(vectorAB[1], 2)
+      const fractionLowerPart1 = Math.pow(vectorAC[0], 2) + Math.pow(vectorAC[1], 2)
+      const fractionLowerPart = Math.sqrt(fractionLowerPart0) * Math.sqrt(fractionLowerPart1)
+      const arcCosARadians = Math.acos(fractionUpperPart / fractionLowerPart)
+      const xRight = XC >= 0 && XC < 125
+      const xLeft = XC >= 125 && XC <= 250
+      const yTop = YC >= 0 && YC < 125
+      const yBottom = YC >= 125 && YC <= 250
+      if (xLeft && (yTop || yBottom)) this.degree = Math.floor((180 / Math.PI) * arcCosARadians)
+      if (xRight && (yTop || yBottom)) this.degree = 360 - Math.floor((180 / Math.PI) * arcCosARadians)
     }
   },
   computed: {
-    isHourMode() {
-      return this.mode === this.MODE.HOUR;
+    isHourMode () {
+      return this.mode === this.MODE.HOUR
     },
-    clockItems() {
+    clockItems () {
       if (this.isHourMode) {
-        return Array.from({length: 12}, (v, k) => k + 1);
+        return Array.from({length: 12}, (v, k) => k + 1)
       } else {
-        const arr = Array.from({length: 12}, (v, k) => k * 5);
-        arr.push(arr.shift());
-        return arr;
+        const arr = Array.from({length: 12}, (v, k) => k * 5)
+        arr.push(arr.shift())
+        return arr
       }
     }
   }

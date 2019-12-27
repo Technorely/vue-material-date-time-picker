@@ -14,17 +14,17 @@
 </template>
 
 <script>
-import { MODE } from '../constants';
+import { MODE } from '../constants'
 
 export default {
-	name: 'Buttons',
+  name: 'Buttons',
   props: {
-	  mode: {
-	    type: Number,
+    mode: {
+      type: Number,
       required: true
     },
     canFinish: {
-	    type: Boolean,
+      type: Boolean,
       required: true
     }
   },
@@ -32,14 +32,14 @@ export default {
     MODE
   }),
   computed: {
-    disabled() {
-	    return (this.mode === 4 || this.mode === 3) && !this.canFinish;
+    disabled () {
+      return (this.mode === 4 || this.mode === 3) && !this.canFinish
     },
-    isCalendarIconShown() {
-	    return this.mode === this.MODE.HOUR || this.mode === this.MODE.MINUTE;
+    isCalendarIconShown () {
+      return this.mode === this.MODE.HOUR || this.mode === this.MODE.MINUTE
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

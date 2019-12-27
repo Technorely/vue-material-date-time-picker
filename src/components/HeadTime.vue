@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { MODE } from '../constants';
+import { MODE } from '../constants'
 
 export default {
   name: 'HeadTime',
@@ -30,19 +30,19 @@ export default {
     MODE
   }),
   computed: {
-    hour() {
-      return this.hours !== null ? this.hours : '--';
+    hour () {
+      return this.hours !== null ? this.hours : '--'
     },
-    minute() {
-      let minutes = this.minutes !== null ? this.minutes : '--';
-      if (Number.isInteger(minutes) && minutes < 10) minutes = `0${minutes}`;
-      return minutes;
+    minute () {
+      let minutes = this.minutes !== null ? this.minutes : '--'
+      if (Number.isInteger(minutes) && minutes < 10) minutes = `0${minutes}`
+      return minutes
     },
-    pmOrAm() {
-      return this.isPm ? 'PM' : 'AM';
+    pmOrAm () {
+      return this.isPm ? 'PM' : 'AM'
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -27,13 +27,13 @@ export default {
     }
   },
   computed: {
-    dateText() {
-      const shrinkWeekDay = this.weekDay.substr(0, 3);
-      const shrinkMonth = this.month.substr(0, 3);
-      return `${shrinkWeekDay}, ${shrinkMonth} ${this.date}`;
+    dateText () {
+      const shrinkWeekDay = this.weekDay.substr(0, 3)
+      const shrinkMonth = this.month.substr(0, 3)
+      return `${shrinkWeekDay}, ${shrinkMonth} ${this.date}`
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

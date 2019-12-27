@@ -26,45 +26,45 @@
 
 <script>
 export default {
-	name: 'Day',
+  name: 'Day',
   props: {
-	  name: {
-	    type: Array,
+    name: {
+      type: Array,
       required: true
     },
     number: {
-	    type: Number,
+      type: Number,
       required: true
     },
     position: {
-	    type: Number,
+      type: Number,
       required: true
     },
     selectedDay: {
-	    type: Number,
+      type: Number,
       required: true
     }
   },
   methods: {
-    handleClick(day) {
-      this.$emit('day', day);
+    handleClick (day) {
+      this.$emit('day', day)
     }
   },
   computed: {
-	  days() {
-	    const prevMonthDays = new Array(this.position).fill(null);
-	    const monthDays = Array.from({length: this.number}, (v, k) => k+1);
-      return [...prevMonthDays, ...monthDays];
+    days () {
+      const prevMonthDays = new Array(this.position).fill(null)
+      const monthDays = Array.from({length: this.number}, (v, k) => k + 1)
+      return [...prevMonthDays, ...monthDays]
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/css/var";
 
 .body {
-  height: calc(290px - 16px);
+  height: 290px;
   overflow: auto;
   padding: 0 12px;
 }

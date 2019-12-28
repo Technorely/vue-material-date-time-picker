@@ -1,29 +1,57 @@
 # vue-material-date-time-picker
 
-## Project setup
+A date and time picker Vue component. Compatible with Vue 2.x. Performed in material design.
+
+- [Demo](#demo)
+- [Install](#install)
+- [Usage](#usage)
+- [Props](#available-props)
+
+NB. Vue 1.x is not supported.
+
+## Demo
+
+To view a demo online:
+
+To view demo examples locally clone the repo and run `npm install && npm run serve` or `yarn && yarn serve`
+
+## Install
+
+``` bash
+npm install vue-material-date-time-picker --save
 ```
-yarn install
+or
+```
+yarn add vue-material-date-time-picker --save
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
+To use component in your project import it as it is shown bellow
+
+``` javascript
+<script>
+import VueMaterialDateTimePicker from 'vue-material-date-time-picker'
+
+export default {
+  // ...
+  components: {
+    VueMaterialDateTimePicker
+  },
+  // ...
+}
+</script>
 ```
 
-### Compiles and minifies for production
-```
-yarn run build
+## Usage
+
+``` html
+<VueMaterialDateTimePicker v-model="date" :is-date-only="true" />
 ```
 
-### Run your tests
-```
-yarn run test
-```
+*value* prop that is handled by `v-model` will be `new Date()` type string
 
-### Lints and fixes files
-```
-yarn run lint
-```
+## Available props
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+| Prop                          | Type            | Default     | Description                                   |
+|-------------------------------|-----------------|-------------|-----------------------------------------------|
+| value                         | String          |             | Date value of the date time picker            |      |
+| is-date-only                  | Boolean         |             | Define if picker takes only date or time too  |                      |

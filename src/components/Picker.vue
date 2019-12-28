@@ -22,6 +22,7 @@
         :hours="hour"
         :minutes="minute"
         :is-pm="pm"
+        :mode="mode"
         @modeUpdate="handleModeUpdateFromTimeHeader"
       />
       <Switcher

@@ -1,8 +1,16 @@
 <template>
   <div class="header">
-    <span class="text text--pointer" @click="$emit('modeUpdate', MODE.HOUR)">{{ hour }}</span>
+    <span
+      :class="{active: mode === 3}"
+      class="text text--pointer"
+      @click="$emit('modeUpdate', MODE.HOUR)"
+    >{{ hour }}</span>
     <span class="text">:</span>
-    <span class="text text--pointer" @click="$emit('modeUpdate', MODE.MINUTE)">{{ minute }}</span>
+    <span
+      :class="{active: mode === 4}"
+      class="text text--pointer"
+      @click="$emit('modeUpdate', MODE.MINUTE)"
+    >{{ minute }}</span>
     <span class="text text--sm">{{ pmOrAm }}</span>
   </div>
 </template>
@@ -23,6 +31,10 @@ export default {
     },
     isPm: {
       type: Boolean,
+      required: true
+    },
+    mode: {
+      type: Number,
       required: true
     }
   },
@@ -64,6 +76,10 @@ export default {
   line-height: 70px;
   font-weight: 500;
   text-align: right;
+  opacity: 0.5;
+  &.active {
+    opacity: 1;
+  }
   &--pointer {
     cursor: pointer;
   }
@@ -73,6 +89,7 @@ export default {
     font-size: 24px;
     line-height: 24px;
     font-weight: 400;
+    opacity: 1;
   }
 }
 </style>

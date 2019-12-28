@@ -16,7 +16,11 @@
         </li>
       </ul>
       <div class="center-point"></div>
-      <div class="arrow" :style="{transform: `rotate(${degree}deg)`}"></div>
+      <div
+        class="arrow"
+        :class="{pressed: isPressed}"
+        :style="{transform: `rotate(${degree}deg)`}"
+      ></div>
       <button
         class="button button--left"
         :class="{active: !isPm}"
@@ -103,7 +107,6 @@ export default {
       this.isPressed = false
       if (this.isHourMode) {
         this.$emit('mode', this.MODE.MINUTE)
-        this.degree = 0
       }
     },
     handleMouseMove (event) {
@@ -195,6 +198,10 @@ export default {
     position: absolute;
     z-index: 10;
     background-color: rgba($c-blue, 0.75);
+    transition: all 0.75s ease-in-out;
+    &.pressed {
+      transition: none;
+    }
     &:before {
       display: block;
       content: '';
@@ -262,12 +269,17 @@ export default {
   bottom: 0;
   border: none;
   border-radius: 50%;
+  margin: 0;
+  padding: 0;
   width: 32px;
   height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  line-height: 22px;
+  font-size: 12px;
+  line-height: 12px;
   font-weight: 600;
   color: $c-black;
   background-color: rgba($c-gray, 0.75);

@@ -55,7 +55,7 @@ export default {
     isPressed: false,
     XC: null,
     YC: null,
-    degree: 1,
+    degree: 0,
     hours: null,
     minutes: null
   }),

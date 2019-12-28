@@ -35,18 +35,18 @@
         @forward="handleSwitchForward"
       />
       <Year
-        v-if="mode === 0"
+        v-show="mode === 0"
         :selected-year="year"
         @year="setYear"
       />
       <Month
-        v-else-if="mode === 1"
+        v-show="mode === 1"
         :name="MONTH_SET"
         :selected-moth="month"
         @month="setMonth"
       />
       <Day
-        v-else-if="mode === 2"
+        v-show="mode === 2"
         :number="getNumberOfDaysInMonth"
         :position="firstDayOfMonthPosition"
         :name="weekDaysShortNamesSet"
@@ -54,7 +54,7 @@
         @day="setDay"
       />
       <Time
-        v-else
+        v-show="mode === 3 || mode === 4"
         :mode="mode"
         :is-pm="pm"
         @mode="setMode"

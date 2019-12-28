@@ -73,6 +73,7 @@ export default {
   &.disabled {
     opacity: 0.25;
     cursor: not-allowed;
+    pointer-events: none;
   }
 }
 </style>

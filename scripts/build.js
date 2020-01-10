@@ -7,7 +7,7 @@ import autoprefixer from 'autoprefixer'
 import commonjs from 'rollup-plugin-commonjs'
 
 export default [{
-  input: path.join(__dirname, '..', 'src', 'components', 'Datepicker.vue'),
+  input: path.join(__dirname, '..', 'src', 'components', 'VueMaterialDateTimePicker.vue'),
   output: [
     {
       file: 'dist/vue-material-date-time-picker.js',
@@ -23,19 +23,6 @@ export default [{
       format: 'es'
     }
   ],
-  plugins: [
-    vue({css: true}),
-    postcss({plugins: [autoprefixer()]}),
-    commonjs(),
-    babel({exclude: 'node_modules/**'})
-  ]
-}, {
-  input: path.join(__dirname, '..', 'src', 'components', 'VueMaterialDateTimePicker.vue'),
-  output: {
-    file: 'dist/vue-material-date-time-picker.min.js',
-    format: 'umd',
-    name: 'VueMaterialDateTimePicker'
-  },
   plugins: [
     vue({css: true}),
     postcss({plugins: [autoprefixer()]}),

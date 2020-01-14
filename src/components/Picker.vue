@@ -8,8 +8,8 @@
 -->
 
 <template>
-  <div class="wrap">
-    <div class="picker">
+  <div class="vmdtp_wrap">
+    <div class="vmdtp_picker">
       <HeadDate
         v-if="mode < 3"
         :year="year"
@@ -276,7 +276,7 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/css/var.scss";
 
-.wrap {
+.vmdtp_wrap {
   position: fixed;
   z-index: 1000;
   top: 0;
@@ -286,7 +286,7 @@ export default {
   background-color: rgba($c-black, 0.25);
 }
 
-.picker {
+.vmdtp_picker {
   position: absolute;
   z-index: 1;
   top: 50%;

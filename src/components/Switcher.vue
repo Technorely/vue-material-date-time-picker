@@ -1,10 +1,10 @@
 <template>
-  <div class="switch">
-    <span class="arrow arrow--left" @click="goBack">&#10094;</span>
-    <div class="content">
-      <p class="text" @click="toggleMode">{{ `${this.month} ${this.year}` }}</p>
+  <div class="vmdtp_switch">
+    <span class="vmdtp_arrow vmdtp_arrow--left" @click="goBack">&#10094;</span>
+    <div class="vmdtp_content">
+      <p class="vmdtp_text" @click="toggleMode">{{ `${this.month} ${this.year}` }}</p>
     </div>
-    <span class="arrow arrow--right" @click="goForward">&#10095;</span>
+    <span class="vmdtp_arrow vmdtp_arrow--right" @click="goForward">&#10095;</span>
   </div>
 </template>
 
@@ -42,14 +42,14 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/css/var";
 
-.switch {
+.vmdtp_switch {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 4px 16px;
 }
 
-.arrow {
+.vmdtp_arrow {
   color: $c-black;
   width: 24px;
   height: 24px;
@@ -61,11 +61,11 @@ export default {
   }
 }
 
-.content {
+.vmdtp_content {
   flex-grow: 1;
 }
 
-.text {
+.vmdtp_text {
   margin: 0;
   text-align: center;
   font-family: Roboto, sans-serif;

@@ -1,19 +1,19 @@
 <template>
-  <div class="body">
-    <ul class="head">
+  <div class="vmdtp_body">
+    <ul class="vmdtp_head">
       <li
         v-for="(day, index) in name"
         :key="`${day}-${index}`"
-        class="head__item"
+        class="vmdtp_head__item"
       >
         {{ day }}
       </li>
     </ul>
-    <ul class="main">
+    <ul class="vmdtp_main">
       <li
         v-for="(day, index) in days"
         :key="`${day}-${index}`"
-        class="main__item"
+        class="vmdtp_main__item"
         @click="handleClick(day)"
       >
         <span :class="{ selected: (day === selectedDay)}">
@@ -63,13 +63,13 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/css/var";
 
-.body {
+.vmdtp_body {
   height: 290px;
   overflow: auto;
   padding: 0 12px;
 }
 
-.head {
+.vmdtp_head {
   padding: 0;
   margin: 0;
   list-style: none;
@@ -89,7 +89,7 @@ export default {
   }
 }
 
-.main {
+.vmdtp_main {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;

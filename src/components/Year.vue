@@ -1,12 +1,12 @@
 <template>
-  <div class="body">
-    <ul class="list">
+  <div class="vmdtp_body">
+    <ul class="vmdtp_list">
       <li
         v-for="year in yearRange"
         :key="`${year}-year`"
         :ref="`${year}-year`"
         :class="{ selected: (parseInt(year) === parseInt(selectedYear))}"
-        class="list-item"
+        class="vmdtp_list-item"
         @click="handleClick(year)"
       >
         {{ year }}
@@ -57,7 +57,7 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/css/var";
 
-.body {
+.vmdtp_body {
   height: 290px;
   overflow: auto;
   &::-webkit-scrollbar {
@@ -76,12 +76,12 @@ export default {
   }
 }
 
-.list {
+.vmdtp_list {
   list-style: none;
   padding: 0;
 }
 
-.list-item {
+.vmdtp_list-item {
   padding: 8px 0;
   text-align: center;
   font-family: Roboto, sans-serif;

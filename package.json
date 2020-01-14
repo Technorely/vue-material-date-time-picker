@@ -1,6 +1,6 @@
 {
   "name": "vue-material-date-time-picker",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A simple Vue.js date and time picker made with material design in mind",
   "author": "Arthur Zakharov <zakharov.arthur@hotmail.com>",
   "private": false,
@@ -13,9 +13,9 @@
     "time-piker",
     "calendar"
   ],
-  "main": "dist/VueMaterialDateTimePicker.umd.js",
-  "module": "dist/VueMaterialDateTimePicker.esm.js",
-  "unpkg": "dist/VueMaterialDateTimePicker.min.js",
+  "main": "dist/vue-material-date-time-picker.umd.js",
+  "module": "dist/vue-material-date-time-picker.esm.js",
+  "unpkg": "dist/vue-material-date-time-picker.min.js",
   "files": [
     "dist",
     "src"

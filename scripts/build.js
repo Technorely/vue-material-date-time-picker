@@ -27,19 +27,6 @@ export default [{
     vue({css: true}),
     postcss({plugins: [autoprefixer()]}),
     commonjs(),
-    babel({exclude: 'node_modules/**'})
-  ]
-}, {
-  input: path.join(__dirname, '..', 'src', 'components', 'VueMaterialDateTimePicker.vue'),
-  output: {
-    file: 'dist/vue-material-date-time-picker.min.js',
-    format: 'umd',
-    name: 'VueMaterialDateTimePicker'
-  },
-  plugins: [
-    vue({css: true}),
-    postcss({plugins: [autoprefixer()]}),
-    commonjs(),
     terser(),
     babel({exclude: 'node_modules/**'})
   ]

@@ -1,8 +1,8 @@
 <template>
-  <div class="body">
-    <div class="clock">
+  <div class="vmdtp_body">
+    <div class="vmdtp_clock">
       <ul
-        class="items"
+        class="vmdtp_items"
         @mousedown="handleMouseDown"
         @mousemove="handleMouseMove"
         @mouseup="handleMouseUp"
@@ -10,24 +10,24 @@
         <li
           v-for="clockItem in clockItems"
           :key="`${clockItem}-clockItem`"
-          class="item"
+          class="vmdtp_item"
         >
           {{ clockItem }}
         </li>
       </ul>
-      <div class="center-point"></div>
+      <div class="vmdtp_center-point"></div>
       <div
-        class="arrow"
+        class="vmdtp_arrow"
         :class="{pressed: isPressed}"
         :style="{transform: `rotate(${degree}deg)`}"
       ></div>
       <button
-        class="button button--left"
+        class="vmdtp_button vmdtp_button--left"
         :class="{active: !isPm}"
         @click="handlePmChange(false)"
       >AM</button>
       <button
-        class="button button--right"
+        class="vmdtp_button vmdtp_button--right"
         :class="{active: isPm}"
         @click="handlePmChange(true)"
       >PM</button>
@@ -162,7 +162,7 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/css/var";
 
-.body {
+.vmdtp_body {
   height: 290px;
   overflow: auto;
   padding: 0 12px;
@@ -171,13 +171,13 @@ export default {
   justify-content: center;
 }
 
-.clock {
+.vmdtp_clock {
   position: relative;
   width: 250px;
   height: 250px;
   border-radius: 50%;
   background-color: $c-gray;
-  .center-point {
+  .vmdtp_center-point {
     position: absolute;
     z-index: 10;
     top: 50%;
@@ -188,7 +188,7 @@ export default {
     border-radius: 50%;
     background-color: rgba($c-blue, 0.75);
   }
-  .arrow {
+  .vmdtp_arrow {
     pointer-events: none;
     height: calc(50% - 36px);
     width: 4px;
@@ -216,7 +216,7 @@ export default {
       cursor: grab;
     }
   }
-  .items {
+  .vmdtp_items {
     position: absolute;
     z-index: 11;
     top: 0;
@@ -229,7 +229,7 @@ export default {
     border-radius: 50%;
     background-color: transparent;
   }
-  .item {
+  .vmdtp_item {
     pointer-events: none;
     position: absolute;
     z-index: 1;
@@ -263,7 +263,7 @@ export default {
   }
 }
 
-.button {
+.vmdtp_button {
   position: absolute;
   z-index: 1;
   bottom: 0;

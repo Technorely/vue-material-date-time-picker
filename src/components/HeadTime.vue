@@ -1,17 +1,17 @@
 <template>
-  <div class="header">
+  <div class="vmdtp_header">
     <span
       :class="{active: mode === 3}"
-      class="text text--pointer"
+      class="vmdtp_text vmdtp_text--pointer"
       @click="$emit('modeUpdate', MODE.HOUR)"
     >{{ hour }}</span>
-    <span class="text">:</span>
+    <span class="vmdtp_text">:</span>
     <span
       :class="{active: mode === 4}"
-      class="text text--pointer"
+      class="vmdtp_text vmdtp_text--pointer"
       @click="$emit('modeUpdate', MODE.MINUTE)"
     >{{ minute }}</span>
-    <span class="text text--sm">{{ pmOrAm }}</span>
+    <span class="vmdtp_text vmdtp_text--sm">{{ pmOrAm }}</span>
   </div>
 </template>
 
@@ -60,7 +60,7 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/css/var";
 
-.header {
+.vmdtp_header {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -69,7 +69,7 @@ export default {
   padding: 16px;
 }
 
-.text {
+.vmdtp_text {
   margin: 0;
   font-family: "Roboto", sans-serif;
   font-size: 70px;

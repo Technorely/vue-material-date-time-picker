@@ -1,11 +1,11 @@
 <template>
-  <div class="body">
-    <ul class="list">
+  <div class="vmdtp_body">
+    <ul class="vmdtp_list">
       <li
         v-for="(month, index) in months"
         :key="`${month}-month`"
         :class="{ selected: (index === selectedMoth)}"
-        class="list-item"
+        class="vmdtp_list-item"
         @click="handleClick(index)"
       >
         {{ month }}
@@ -43,13 +43,13 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/css/var";
 
-.body {
+.vmdtp_body {
   height: 242px;
   overflow: auto;
   padding: 0 12px;
 }
 
-.list {
+.vmdtp_list {
   height: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -60,7 +60,7 @@ export default {
   list-style: none;
 }
 
-.list-item {
+.vmdtp_list-item {
   display: flex;
   align-items: center;
   justify-content: center;

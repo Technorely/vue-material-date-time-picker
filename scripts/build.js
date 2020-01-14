@@ -7,7 +7,7 @@ import autoprefixer from 'autoprefixer'
 import commonjs from 'rollup-plugin-commonjs'
 
 export default [{
-  input: path.join(__dirname, '..', 'src', 'components', 'Datepicker.vue'),
+  input: path.join(__dirname, '..', 'src', 'components', 'VueMaterialDateTimePicker.vue'),
   output: [
     {
       file: 'dist/vue-material-date-time-picker.js',

@@ -1,12 +1,12 @@
 <template>
-  <label class="label">
+  <label class="vmdtp_label">
     <input
       v-bind="$attrs"
       :value="value"
       v-on="listeners"
       :disabled="isPickerShown"
       ref="input"
-      class="input"
+      class="vmdtp_input"
       @click="handleClick"
       @keypress.enter="isPickerShown = true"
     >
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.input {
+.vmdtp_input {
   box-sizing: border-box;
   width: 100%;
   padding: 8px 12px;

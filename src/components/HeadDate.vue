@@ -1,7 +1,7 @@
 <template>
-  <div class="header">
-    <p class="text text--year">{{ year }}</p>
-    <p class="text text--month">{{ dateText }}</p>
+  <div class="vmdtp_header">
+    <p class="vmdtp_text text--year">{{ year }}</p>
+    <p class="vmdtp_text text--month">{{ dateText }}</p>
   </div>
 </template>
 
@@ -39,13 +39,13 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/css/var";
 
-.header {
+.vmdtp_header {
   background-color: $c-blue;
   color: $c-white;
   padding: 16px;
 }
 
-.text {
+.vmdtp_text {
   margin: 0;
   display: block;
   font-family: "Roboto", sans-serif;

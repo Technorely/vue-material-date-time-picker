@@ -1,10 +1,10 @@
 <template>
   <div class="vmdtp_switch">
-    <span class="vmdtp_arrow vmdtp_arrow--left" @click="goBack">&#10094;</span>
+    <span class="vmdtp_arrow vmdtp_arrow--left" @click.prevent="goBack">&#10094;</span>
     <div class="vmdtp_content">
-      <p class="vmdtp_text" @click="toggleMode">{{ `${this.month} ${this.year}` }}</p>
+      <p class="vmdtp_text" @click.prevent="toggleMode">{{ `${this.month} ${this.year}` }}</p>
     </div>
-    <span class="vmdtp_arrow vmdtp_arrow--right" @click="goForward">&#10095;</span>
+    <span class="vmdtp_arrow vmdtp_arrow--right" @click.prevent="goForward">&#10095;</span>
   </div>
 </template>
 
@@ -68,7 +68,7 @@ export default {
 .vmdtp_text {
   margin: 0;
   text-align: center;
-  font-family: Roboto, sans-serif;
+  font-family: sans-serif;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;

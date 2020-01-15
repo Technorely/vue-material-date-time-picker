@@ -24,12 +24,12 @@
       <button
         class="vmdtp_button vmdtp_button--left"
         :class="{active: !isPm}"
-        @click="handlePmChange(false)"
+        @click.prevent="handlePmChange(false)"
       >AM</button>
       <button
         class="vmdtp_button vmdtp_button--right"
         :class="{active: isPm}"
-        @click="handlePmChange(true)"
+        @click.prevent="handlePmChange(true)"
       >PM</button>
     </div>
   </div>
@@ -242,7 +242,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Roboto', sans-serif;
+    font-family: sans-serif;
     font-size: 24px;
     font-weight: 500;
     transform: translate(-50%, -50%);
@@ -277,7 +277,7 @@ export default {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-family: 'Roboto', sans-serif;
+  font-family: sans-serif;
   font-size: 12px;
   line-height: 12px;
   font-weight: 600;

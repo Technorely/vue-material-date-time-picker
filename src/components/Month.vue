@@ -6,7 +6,7 @@
         :key="`${month}-month`"
         :class="{ selected: (index === selectedMoth)}"
         class="vmdtp_list-item"
-        @click="handleClick(index)"
+        @click.prevent="handleClick(index)"
       >
         {{ month }}
       </li>
@@ -68,7 +68,7 @@ export default {
   height: 36px;
   padding: 0 16px;
   border-radius: 4px;
-  font-family: Roboto, sans-serif;
+  font-family: sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: $c-black;

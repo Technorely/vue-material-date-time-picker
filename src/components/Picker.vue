@@ -102,6 +102,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    definedDate: {
+      type: Date,
+      required: false,
+      default: null
     }
   },
   data: () => ({
@@ -260,7 +265,7 @@ export default {
     }
   },
   created () {
-    this.todayStamp = new Date()
+    this.todayStamp = this.definedDate ? new Date(this.definedDate) : new Date()
     this.todayDate = this.todayStamp.getDate()
     this.todayMonth = this.todayStamp.getMonth()
     this.todayYear = this.todayStamp.getFullYear()

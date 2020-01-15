@@ -1,7 +1,7 @@
 <template>
   <div class="vmdtp_header">
-    <p class="vmdtp_text text--year">{{ year }}</p>
-    <p class="vmdtp_text text--month">{{ dateText }}</p>
+    <p class="vmdtp_text vmdtp_text--year">{{ year }}</p>
+    <p class="vmdtp_text vmdtp_text--month">{{ dateText }}</p>
   </div>
 </template>
 
@@ -48,11 +48,11 @@ export default {
 .vmdtp_text {
   margin: 0;
   display: block;
-  font-family: "Roboto", sans-serif;
+  font-family: sans-serif;
   text-align: left;
   overflow: hidden;
   &--year {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 500;
     margin-bottom: 8px;
   }

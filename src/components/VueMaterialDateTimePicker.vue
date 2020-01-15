@@ -31,12 +31,12 @@ export default {
   },
   props: {
     value: {
-      type: String | Number,
+      type: String | Number | Date | Object,
       required: false,
       default: ''
     },
     valueFormatted: {
-      type: String | Number | Date,
+      type: String | Number | Date | Object,
       required: false,
       default: ''
     },

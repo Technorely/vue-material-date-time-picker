@@ -2,17 +2,18 @@
   <label class="vmdtp_label">
     <input
       v-bind="$attrs"
-      :value="value"
+      :value="displayedValue"
       v-on="listeners"
       :disabled="isPickerShown"
       ref="input"
       class="vmdtp_input"
-      @click="handleClick"
+      @click.prevent="handleClick"
       @keypress.enter="isPickerShown = true"
     >
     <transition>
       <Picker
         v-if="isPickerShown"
+        :defined-date="value"
         :is-date-only="isDateOnly"
         @close="handleClose"
         @set="handleSet"
@@ -34,6 +35,11 @@ export default {
       required: false,
       default: ''
     },
+    valueFormatted: {
+      type: String | Number | Date,
+      required: false,
+      default: ''
+    },
     isDateOnly: {
       type: Boolean,
       required: false,
@@ -49,6 +55,10 @@ export default {
         ...this.$listeners,
         input: event => this.$emit('input', event)
       }
+    },
+    displayedValue () {
+      const isValueFormattedPassed = this.$options.propsData.hasOwnProperty('valueFormatted')
+      return isValueFormattedPassed ? this.valueFormatted : this.value
     }
   },
   methods: {

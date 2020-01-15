@@ -53,5 +53,7 @@ export default {
 
 | Prop                          | Type            | Default     | Description                                   |
 |-------------------------------|-----------------|-------------|-----------------------------------------------|
-| value                         | String          |             | Date value of the date time picker            |      |
+| value                         | String          |             | Date value of the date time picker            |
+| valueFormatted                | String          |             | Formatted value that will be displayed, if    |
+|                               |                 |             | not passed value (JS Date()) will be used     |
 | is-date-only                  | Boolean         |             | Define if picker takes only date or time too  |                      |

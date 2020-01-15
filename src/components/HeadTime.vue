@@ -3,13 +3,13 @@
     <span
       :class="{active: mode === 3}"
       class="vmdtp_text vmdtp_text--pointer"
-      @click="$emit('modeUpdate', MODE.HOUR)"
+      @click.prevent="$emit('modeUpdate', MODE.HOUR)"
     >{{ hour }}</span>
     <span class="vmdtp_text">:</span>
     <span
       :class="{active: mode === 4}"
       class="vmdtp_text vmdtp_text--pointer"
-      @click="$emit('modeUpdate', MODE.MINUTE)"
+      @click.prevent="$emit('modeUpdate', MODE.MINUTE)"
     >{{ minute }}</span>
     <span class="vmdtp_text vmdtp_text--sm">{{ pmOrAm }}</span>
   </div>

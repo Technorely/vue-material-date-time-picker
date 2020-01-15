@@ -14,7 +14,7 @@
         v-for="(day, index) in days"
         :key="`${day}-${index}`"
         class="vmdtp_main__item"
-        @click="handleClick(day)"
+        @click.prevent="handleClick(day)"
       >
         <span :class="{ selected: (day === selectedDay)}">
           {{ day }}
@@ -81,7 +81,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Roboto, sans-serif;
+    font-family: sans-serif;
     font-size: 12px;
     font-weight: 600;
     line-height: 22px;
@@ -111,7 +111,7 @@ export default {
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      font-family: Roboto, sans-serif;
+      font-family: sans-serif;
       font-size: 12px;
       font-weight: 600;
       line-height: 22px;

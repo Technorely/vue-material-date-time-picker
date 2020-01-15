@@ -7,7 +7,7 @@
         :ref="`${year}-year`"
         :class="{ selected: (parseInt(year) === parseInt(selectedYear))}"
         class="vmdtp_list-item"
-        @click="handleClick(year)"
+        @click.prevent="handleClick(year)"
       >
         {{ year }}
       </li>
@@ -84,7 +84,7 @@ export default {
 .vmdtp_list-item {
   padding: 8px 0;
   text-align: center;
-  font-family: Roboto, sans-serif;
+  font-family: sans-serif;
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.1px;

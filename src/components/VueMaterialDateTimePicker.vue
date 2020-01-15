@@ -15,6 +15,7 @@
         v-if="isPickerShown"
         :defined-date="value"
         :is-date-only="isDateOnly"
+        :is-time-only="isTimeOnly"
         @close="handleClose"
         @set="handleSet"
       />
@@ -41,6 +42,11 @@ export default {
       default: ''
     },
     isDateOnly: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    isTimeOnly: {
       type: Boolean,
       required: false,
       default: false

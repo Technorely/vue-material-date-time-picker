@@ -26,6 +26,11 @@ export default {
     canFinish: {
       type: Boolean,
       required: true
+    },
+    isTimeOnly: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data: () => ({
@@ -36,7 +41,7 @@ export default {
       return (this.mode === 4 || this.mode === 3) && !this.canFinish
     },
     isCalendarIconShown () {
-      return this.mode === this.MODE.HOUR || this.mode === this.MODE.MINUTE
+      return !this.isTimeOnly && (this.mode === this.MODE.HOUR || this.mode === this.MODE.MINUTE)
     }
   }
 }

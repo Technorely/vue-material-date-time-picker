@@ -11,6 +11,15 @@
       </code>
     </section>
     <section>
+      <h3>Use <b>DateTimePicker</b> in time only mode</h3>
+      <div>
+        <VueMaterialDateTimePicker v-model="timeOnly" :is-time-only="true" />
+      </div>
+      <code>
+        &lt;VueMaterialDateTimePicker v-model="dateOnly" :is-time-only="true" /&gt;
+      </code>
+    </section>
+    <section>
       <h3>Use <b>DateTimePicker</b> in date & time mode</h3>
       <div>
         <VueMaterialDateTimePicker v-model="dateAndTime" :is-date-only="false" />
@@ -32,6 +41,7 @@ export default {
   },
   data: () => ({
     dateOnly: null,
+    timeOnly: null,
     dateAndTime: null
   })
 }

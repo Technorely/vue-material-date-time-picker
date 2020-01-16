@@ -67,6 +67,7 @@
         v-if="mode >= 2"
         :mode="mode"
         :can-finish="canFinish"
+        :is-time-only="isTimeOnly"
         @calendar="handleCalendarClick"
         @cancel="handleCancelClick"
         @ok="handleOkClick"
@@ -99,6 +100,11 @@ export default {
   },
   props: {
     isDateOnly: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    isTimeOnly: {
       type: Boolean,
       required: false,
       default: false
@@ -153,7 +159,7 @@ export default {
     minute: null,
     pm: true,
     canFinish: true,
-    mode: 2
+    mode: null
   }),
   methods: {
     setDay (date) {
@@ -274,6 +280,7 @@ export default {
     this.day = this.todayStamp.getDay()
     this.month = this.todayMonth
     this.year = this.todayYear
+    this.mode = this.isTimeOnly ? 3 : 2
   }
 }
 </script>

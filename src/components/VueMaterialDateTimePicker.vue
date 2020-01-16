@@ -15,6 +15,7 @@
         v-if="isPickerShown"
         :defined-date="value"
         :is-date-only="isDateOnly"
+        :is-time-only="isTimeOnly"
         @close="handleClose"
         @set="handleSet"
       />
@@ -31,16 +32,21 @@ export default {
   },
   props: {
     value: {
-      type: String | Number,
+      type: String | Number | Date | Object,
       required: false,
       default: ''
     },
     valueFormatted: {
-      type: String | Number | Date,
+      type: String | Number | Date | Object,
       required: false,
       default: ''
     },
     isDateOnly: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    isTimeOnly: {
       type: Boolean,
       required: false,
       default: false

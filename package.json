@@ -1,6 +1,6 @@
 {
   "name": "vue-material-date-time-picker",
-  "version": "0.3",
+  "version": "0.3.0",
   "description": "A simple Vue.js date and time picker made with material design in mind",
   "author": "Arthur Zakharov <artur.zakharov@technorely.com>",
   "private": false,

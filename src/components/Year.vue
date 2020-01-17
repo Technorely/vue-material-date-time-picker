@@ -45,7 +45,7 @@ export default {
     scroll () {
       const pointYear = this.selectedYear - 3
       const selectedYearElement = this.$refs[`${pointYear}-year`][0]
-      selectedYearElement.scrollIntoView({ behavior: 'auto' })
+      if (selectedYearElement && 'scrollIntoView' in selectedYearElement) selectedYearElement.scrollIntoView({ behavior: 'auto' })
     }
   },
   mounted () {

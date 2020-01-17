@@ -32,7 +32,7 @@
   "scripts": {
     "build": "npm run lint && rm -rf dist/* && rollup -c scripts/build.js",
     "serve": "rollup -c scripts/serve.js --watch",
-    "test": "jest --config test/unit/jest.conf.js --coverage",
+    "test": "jest --coverage",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
     "prepublishOnly": "npm run build"
   },
@@ -102,6 +102,17 @@
     "stylus": "^0.54.5",
     "vue-jest": "^4.0.0-beta.2",
     "vue-server-renderer": "^2.6.10"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest",
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+    }
   },
   "browserslist": [
     "> 1%",

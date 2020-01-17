@@ -26,6 +26,7 @@ npm-debug.log
 dist/*
 example/demo.js
 example/demo.js.map
+coverage/*
 test/unit/coverage
 yarn.lock
 TODO

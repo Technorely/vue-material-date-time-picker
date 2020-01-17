@@ -25,4 +25,32 @@ describe('Switcher', () => {
       month: 'January'
     })
   })
+
+  test('Should emit back', () => {
+    component.vm.goBack()
+    component.vm.$nextTick().then(() => {
+      expect(component.emitted().back).toBeTruthy()
+    })
+  })
+
+  test('Should emit forward', () => {
+    component.vm.goForward()
+    component.vm.$nextTick().then(() => {
+      expect(component.emitted().forward).toBeTruthy()
+    })
+  })
+
+  test('Should emit toggle', () => {
+    component.vm.toggleMode()
+    component.vm.$nextTick().then(() => {
+      expect(component.emitted().toggleMode).toBeTruthy()
+    })
+  })
+
+  test('Should emit toggle', () => {
+    component.vm.toggleMode()
+    component.vm.$nextTick().then(() => {
+      expect(component.emitted().toggleMode).toBeTruthy()
+    })
+  })
 })

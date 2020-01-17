@@ -8,7 +8,7 @@ describe('HeadDate', () => {
     component = mount(HeadDate, {
       propsData: {
         year: 2020,
-        date: 15,
+        date: 1579255533224,
         month: 'January',
         weekDay: 'Friday'
       }
@@ -22,7 +22,7 @@ describe('HeadDate', () => {
   test('Should have props', () => {
     expect(component.vm.$props).toEqual({
       year: 2020,
-      date: 15,
+      date: 1579255533224,
       month: 'January',
       weekDay: 'Friday'
     })

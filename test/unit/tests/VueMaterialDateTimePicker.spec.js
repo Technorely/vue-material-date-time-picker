@@ -32,14 +32,19 @@ describe('VueMaterialDateTimePicker', () => {
   })
 
   test('Should have method handleClick', () => {
-    expect(VueMaterialDateTimePicker.methods.handleClick).toBeTruthy()
+    component.vm.handleClick()
+    expect(component.vm.isPickerShown).toBeTruthy()
   })
 
   test('Should have method handleClose', () => {
-    expect(VueMaterialDateTimePicker.methods.handleClose).toBeTruthy()
+    component.vm.handleClose()
+    expect(component.vm.isPickerShown).toBeFalsy()
   })
 
   test('Should have method handleSet', () => {
-    expect(VueMaterialDateTimePicker.methods.handleSet).toBeTruthy()
+    component.vm.handleSet()
+    component.vm.$nextTick().then(() => {
+      expect(!component.vm.isPickerShown && component.emitted().input).toBeTruthy()
+    })
   })
 })

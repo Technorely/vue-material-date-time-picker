@@ -27,4 +27,11 @@ describe('Day', () => {
       selectedDay: 5
     })
   })
+
+  test('Should have method handleClick', () => {
+    component.vm.handleClick(5)
+    component.vm.$nextTick().then(() => {
+      expect(component.emitted().day).toBeTruthy()
+    })
+  })
 })

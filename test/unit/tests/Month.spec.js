@@ -39,7 +39,10 @@ describe('Month', () => {
   })
 
   test('Should have method handleClick', () => {
-    expect(Month.methods.handleClick).toBeTruthy()
+    component.vm.handleClick(5)
+    component.vm.$nextTick().then(() => {
+      expect(component.emitted().month).toBeTruthy()
+    })
   })
 
   test('Should have list of months', () => {

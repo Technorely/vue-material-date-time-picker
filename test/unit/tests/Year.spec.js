@@ -31,4 +31,11 @@ describe('Year', () => {
       selectedYear: 2019
     })
   })
+
+  test('Should have method handleClick', () => {
+    component.vm.handleClick(2020)
+    component.vm.$nextTick().then(() => {
+      expect(component.emitted().year).toBeTruthy()
+    })
+  })
 })

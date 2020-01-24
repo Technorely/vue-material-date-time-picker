@@ -8,9 +8,10 @@
         @mouseup="handleMouseUp"
       >
         <li
-          v-for="clockItem in clockItems"
+          v-for="clockItem in clockItemsDefault"
           :key="`${clockItem}-clockItem`"
-          class="vmdtp_item"
+          class="vmdtp_item minute-step_default"
+          :class="{disabled: isPointDisabled(clockItem)}"
         >
           {{ clockItem }}
         </li>
@@ -48,6 +49,12 @@ export default {
     mode: {
       type: Number,
       required: true
+    },
+    minuteStep: {
+      type: Number,
+      required: false,
+      default: 1,
+      validator: v => [1, 5, 15, 30, 60].includes(v)
     }
   },
   data: () => ({
@@ -67,7 +74,7 @@ export default {
       }
       if (!this.isHourMode) {
         const rounded = Math.round(v / 6)
-        this.minutes = rounded !== 60 ? rounded : 59
+        this.minutes = rounded !== 60 ? rounded : 0
         this.$emit('minute', this.minutes)
       }
     },
@@ -106,8 +113,35 @@ export default {
     handleMouseUp () {
       this.isPressed = false
       if (this.isHourMode) {
-        this.$emit('mode', this.MODE.MINUTE)
+        if (this.minuteStep === 60) {
+          this.minutes = 0
+          this.$emit('minute', this.minutes)
+        } else {
+          this.$emit('mode', this.MODE.MINUTE)
+        }
+      } else {
+        // move clock arrow to closest value
+        if (this.minuteStep === 1) {
+          this.$emit('minute', this.minutes)
+        } else {
+          this.moveArrowToClosestMinute()
+        }
       }
+    },
+    moveArrowToClosestMinute () {
+      const clockItems = [...this.clockItems]
+      clockItems[clockItems.length - 1] = 60
+      this.minutes = this.findClosest(clockItems, this.minutes)
+      this.minutes = this.minutes === 60 ? 0 : this.minutes
+
+      const minutesForDegreeCalculation = this.minutes === 0 ? 60 : this.minutes
+      this.degree = this.calcDegByMinutes(minutesForDegreeCalculation)
+    },
+    isPointDisabled (item) {
+      return !this.isHourMode && !this.clockItems.includes(item)
+    },
+    findClosest (arr, target) {
+      return arr.reduce((prev, curr) => Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev)
     },
     handleMouseMove (event) {
       if (this.isPressed) {
@@ -119,6 +153,9 @@ export default {
     handlePmChange (mode) {
       this.$emit('pm', mode)
       this.$emit('hour', this.hours)
+    },
+    calcDegByMinutes (minutes) {
+      return ((minutes / 60) * 360)
     },
     calculateDeg () {
       const XA = 125
@@ -146,11 +183,20 @@ export default {
     isHourMode () {
       return this.mode === this.MODE.HOUR
     },
+    clockItemsDefault () {
+      if (this.isHourMode) {
+        return Array.from({length: 12}, (v, k) => k + 1)
+      } else {
+        const arr = Array.from({ length: 12 }, (v, k) => k * 5)
+        arr.push(arr.shift())
+        return arr
+      }
+    },
     clockItems () {
       if (this.isHourMode) {
         return Array.from({length: 12}, (v, k) => k + 1)
       } else {
-        const arr = Array.from({length: 12}, (v, k) => k * 5)
+        const arr = this.minuteStep !== 1 ? Array.from({length: 60 / this.minuteStep}, (v, k) => k * this.minuteStep) : Array.from({ length: 12 }, (v, k) => k * 5)
         arr.push(arr.shift())
         return arr
       }
@@ -248,18 +294,24 @@ export default {
     transform: translate(-50%, -50%);
     color: $c-black;
     border-radius: 50%;
-    &:nth-child(1) { transform: translate(135%, -345%) }
-    &:nth-child(2) { transform: translate(255%, -220%) }
-    &:nth-child(3) { transform: translate(300%, -50%) }
-    &:nth-child(4) { transform: translate(255%, 135%) }
-    &:nth-child(5) { transform: translate(130%, 255%) }
-    &:nth-child(6) { transform: translate(-50%, 300%) }
-    &:nth-child(7) { transform: translate(-235%, 250%) }
-    &:nth-child(8) { transform: translate(-350%, 130%) }
-    &:nth-child(9) { transform: translate(-400%, -50%) }
-    &:nth-child(10) { transform: translate(-345%, -230%) }
-    &:nth-child(11) { transform: translate(-220%, -350%) }
-    &:nth-child(12) { transform: translate(-50%, -400%) }
+    &.disabled {
+      color: $c-gray-darken;
+      opacity: 0.8;
+    }
+    &.minute-step_default {
+      &:nth-child(1) { transform: translate(135%, -345%) }
+      &:nth-child(2) { transform: translate(255%, -220%) }
+      &:nth-child(3) { transform: translate(300%, -50%) }
+      &:nth-child(4) { transform: translate(255%, 135%) }
+      &:nth-child(5) { transform: translate(130%, 255%) }
+      &:nth-child(6) { transform: translate(-50%, 300%) }
+      &:nth-child(7) { transform: translate(-235%, 250%) }
+      &:nth-child(8) { transform: translate(-350%, 130%) }
+      &:nth-child(9) { transform: translate(-400%, -50%) }
+      &:nth-child(10) { transform: translate(-345%, -230%) }
+      &:nth-child(11) { transform: translate(-220%, -350%) }
+      &:nth-child(12) { transform: translate(-50%, -400%) }
+    }
   }
 }
 

@@ -75,7 +75,7 @@ export default {
       type: Number,
       required: false,
       default: 1,
-      validator: v => [1, 5, 15, 30, 60].includes(v)
+      validator: v => [1, 5, 15, 30, 45, 60].includes(v)
     },
     hourStep: {
       type: Number,

@@ -53,8 +53,7 @@ export default {
     minuteStep: {
       type: Number,
       required: false,
-      default: 1,
-      validator: v => [1, 5, 15, 30, 60].includes(v)
+      default: 1
     }
   },
   data: () => ({
@@ -196,7 +195,9 @@ export default {
       if (this.isHourMode) {
         return Array.from({length: 12}, (v, k) => k + 1)
       } else {
-        const arr = this.minuteStep !== 1 ? Array.from({length: 60 / this.minuteStep}, (v, k) => k * this.minuteStep) : Array.from({ length: 12 }, (v, k) => k * 5)
+        const arr = this.minuteStep !== 1 ? Array.from({
+          length: Math.ceil((60 / this.minuteStep))
+        }, (v, k) => k * this.minuteStep) : Array.from({ length: 12 }, (v, k) => k * 5)
         arr.push(arr.shift())
         return arr
       }

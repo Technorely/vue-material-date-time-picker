@@ -125,8 +125,7 @@ export default {
     minuteStep: {
       type: Number,
       required: false,
-      default: 1,
-      validator: v => [1, 5, 15, 30, 60].includes(v)
+      default: 1
     }
   },
   data: () => ({

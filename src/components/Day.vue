@@ -11,13 +11,14 @@
     </ul>
     <ul class="vmdtp_main">
       <li
-        v-for="(day, index) in days"
-        :key="`${day}-${index}`"
+        v-for="(obj, index) in days"
+        :key="`${obj.day}-${index}`"
+        :class="{disabled: obj.disabled}"
         class="vmdtp_main__item"
-        @click.prevent="handleClick(day)"
+        @click.prevent="handleClick(obj.day)"
       >
-        <span :class="{ selected: (day === selectedDay)}">
-          {{ day }}
+        <span :class="{ selected: (obj.day === selectedDay)}">
+          {{ obj.day }}
         </span>
       </li>
     </ul>
@@ -43,6 +44,18 @@ export default {
     selectedDay: {
       type: Number,
       required: true
+    },
+    selectedYear: {
+      type: Number,
+      required: true
+    },
+    selectedMoth: {
+      type: Number,
+      required: true
+    },
+    disabledDates: {
+      type: Array | Object,
+      required: false
     }
   },
   methods: {
@@ -54,7 +67,53 @@ export default {
     days () {
       const prevMonthDays = new Array(this.position).fill(null)
       const monthDays = Array.from({length: this.number}, (v, k) => k + 1)
-      return [...prevMonthDays, ...monthDays]
+
+      const isArray = Array.isArray(this.disabledDates)
+      let filteredDates
+      const dates = [...prevMonthDays, ...monthDays]
+
+      if (isArray) {
+        filteredDates = dates.map(v => {
+          let obj = { day: v }
+          const dayDate = new Date(this.selectedYear, this.selectedMoth, v)
+          this.disabledDates.forEach(o => {
+            const toJSDate = o.to && new Date(o.to)
+            const fromJSDate = o.from && new Date(o.from)
+            if (o.to && !o.from && !obj.disabled) {
+              obj.disabled = !(toJSDate.getTime() <= dayDate.getTime())
+            } else if (!o.to && o.from && !obj.disabled) {
+              obj.disabled = !(dayDate.getTime() <= fromJSDate.getTime())
+            } else if (o.to && o.from && !obj.disabled) {
+              obj.disabled = (fromJSDate.getTime() <= dayDate.getTime() && dayDate.getTime() <= toJSDate.getTime())
+            } else if (!obj.disabled) {
+              obj.disabled = false
+            }
+          })
+          return obj
+        })
+      } else {
+        const { from = null, to = null } = this.disabledDates || {}
+
+        const toJSDate = to && new Date(to)
+        const fromJSDate = from && new Date(from)
+
+        filteredDates = dates.map(v => {
+          let obj = { day: v, disabled: false }
+          const dayDate = new Date(this.selectedYear, this.selectedMoth, v)
+          if (to && !from) {
+            obj.disabled = !(toJSDate.getTime() <= dayDate.getTime())
+          } else if (!to && from) {
+            obj.disabled = !(dayDate.getTime() <= fromJSDate.getTime())
+          } else if (to && from) {
+            obj.disabled = (fromJSDate.getTime() <= dayDate.getTime() && dayDate.getTime() <= toJSDate.getTime())
+          } else {
+            obj.disabled = false
+          }
+          return obj
+        })
+      }
+
+      return filteredDates
     }
   }
 }
@@ -102,6 +161,12 @@ export default {
     display: flex;
     justify-content: center;
     flex-basis: calc(100% / 7);
+    &.disabled {
+      pointer-events: none;
+      span {
+        color: $c-gray;
+      }
+    }
     span {
       padding: 0;
       margin: 0;

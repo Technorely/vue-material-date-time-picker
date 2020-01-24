@@ -47,6 +47,9 @@
       />
       <Day
         v-show="mode === 2"
+        :selected-year="year"
+        :selected-moth="month"
+        :disabled-dates="disabledDates"
         :number="getNumberOfDaysInMonth"
         :position="firstDayOfMonthPosition"
         :name="weekDaysShortNamesSet"
@@ -57,6 +60,7 @@
         v-show="mode === 3 || mode === 4"
         :mode="mode"
         :is-pm="pm"
+        :minute-step="minuteStep"
         @mode="setMode"
         @hour="setHour"
         @minute="setMinute"
@@ -113,6 +117,16 @@ export default {
       type: Date,
       required: false,
       default: null
+    },
+    disabledDates: {
+      type: Array | Object,
+      required: false
+    },
+    minuteStep: {
+      type: Number,
+      required: false,
+      default: 1,
+      validator: v => [1, 5, 15, 30, 60].includes(v)
     }
   },
   data: () => ({

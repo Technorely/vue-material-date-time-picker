@@ -4,7 +4,7 @@
     <section>
       <h3>Use <b>DateTimePicker</b> in date only mode</h3>
       <div>
-        <VueMaterialDateTimePicker v-model="dateOnly" :is-date-only="true" />
+        <VueMaterialDateTimePicker  v-model="dateOnly" :disabled-dates="disabledDates" :is-date-only="true" />
       </div>
       <code>
         &lt;VueMaterialDateTimePicker v-model="dateOnly" :is-date-only="true" /&gt;
@@ -28,6 +28,33 @@
         &lt;VueMaterialDateTimePicker v-model="dateOnly" :is-date-only="false" /&gt;
       </code>
     </section>
+    <section>
+      <h3><b>DateTimePicker</b> disabled dates</h3>
+      <div>
+        <VueMaterialDateTimePicker v-model="dateOnly" :disabled-dates="disabledDates" :is-date-only="true" />
+      </div>
+      <code>
+        &lt;VueMaterialDateTimePicker v-model="dateOnly" :disabled-dates="disabledDates" :is-date-only="true"&gt;
+      </code>
+      <code>
+        disabledDates: [
+        {
+        from: new Date(),
+        to: new Date(2020, 0, 25)
+        },
+        {
+        from: new Date(2020, 0, 28),
+        to: new Date(2020, 0, 30)
+        }
+        ]
+      </code>
+    </section>
+    <section>
+      <h3><b>DateTimePicker minute step</b></h3>
+      <div>
+        <VueMaterialDateTimePicker :minute-step="minuteStep" v-model="dateAndTime"  />
+      </div>
+    </section>
   </main>
 </template>
 
@@ -42,7 +69,18 @@ export default {
   data: () => ({
     dateOnly: null,
     timeOnly: null,
-    dateAndTime: null
+    dateAndTime: null,
+    disabledDates: [
+      {
+        from: '2020-01-22T19:56:54.766Z',
+        to: '2020-01-23T14:56:54.766Z'
+      },
+      {
+        from: new Date(2020, 0, 28),
+        to: new Date(2020, 0, 30)
+      }
+    ],
+    minuteStep: 15
   })
 }
 </script>

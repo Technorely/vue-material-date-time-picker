@@ -14,8 +14,10 @@
       <Picker
         v-if="isPickerShown"
         :defined-date="value"
+        :minute-step="minuteStep"
         :is-date-only="isDateOnly"
         :is-time-only="isTimeOnly"
+        :disabled-dates="parsedDisabledDates"
         @close="handleClose"
         @set="handleSet"
       />
@@ -50,12 +52,60 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    disabledDates: {
+      type: Array | Object,
+      required: false,
+      validator: v => {
+        const isArray = Array.isArray(v)
+        const isObject = typeof v === 'object'
+        if (isArray) {
+          return v.every(value => (value.hasOwnProperty('to') ||
+            value.hasOwnProperty('from')) &&
+            (value.to && Date.parse(value.to)) ||
+            (value.from && Date.parse(value.from)))
+        } else if (isObject) {
+          return (v.hasOwnProperty('to') || v.hasOwnProperty('from')) && (v.to && Date.parse(v.to)) ||
+            (v.from && Date.parse(v.to))
+        }
+        return false
+      }
+    },
+    minuteStep: {
+      type: Number,
+      required: false,
+      default: 1,
+      validator: v => [1, 5, 15, 30, 60].includes(v)
+    },
+    hourStep: {
+      type: Number,
+      required: false,
+      default: 1
     }
   },
   data: () => ({
     isPickerShown: false
   }),
   computed: {
+    parsedDisabledDates () {
+      if (this.disabledDates && Array.isArray(this.disabledDates)) {
+        const dates = [ ...this.disabledDates ]
+        return dates.map(d => {
+          Object.keys(d).forEach(k => {
+            let date = new Date(d[k])
+            d[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+          })
+          return d
+        })
+      } else if (this.disabledDates) {
+        const dates = { ...this.disabledDates }
+        Object.keys(dates).forEach(k => {
+          let date = new Date(dates[k])
+          dates[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+        })
+        return dates
+      }
+    },
     listeners () {
       return {
         ...this.$listeners,

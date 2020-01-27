@@ -18,6 +18,7 @@
         :is-date-only="isDateOnly"
         :is-time-only="isTimeOnly"
         :disabled-dates="parsedDisabledDates"
+        :disabled-dates-and-times="parsedDisabledDatesAndTimes"
         @close="handleClose"
         @set="handleSet"
       />
@@ -102,6 +103,25 @@ export default {
         Object.keys(dates).forEach(k => {
           let date = new Date(dates[k])
           dates[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+        })
+        return dates
+      }
+    },
+    parsedDisabledDatesAndTimes () {
+      if (this.disabledDates && Array.isArray(this.disabledDates)) {
+        const dates = [ ...this.disabledDates ]
+        return dates.map(d => {
+          Object.keys(d).forEach(k => {
+            let date = new Date(d[k])
+            d[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())
+          })
+          return d
+        })
+      } else if (this.disabledDates) {
+        const dates = { ...this.disabledDates }
+        Object.keys(dates).forEach(k => {
+          let date = new Date(dates[k])
+          dates[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())
         })
         return dates
       }

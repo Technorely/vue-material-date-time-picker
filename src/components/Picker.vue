@@ -60,6 +60,10 @@
         v-show="mode === 3 || mode === 4"
         :mode="mode"
         :is-pm="pm"
+        :selected-year="year"
+        :selected-moth="month"
+        :selected-day="date"
+        :disabled-dates-and-times="disabledDatesAndTimes"
         :minute-step="minuteStep"
         @mode="setMode"
         @hour="setHour"
@@ -119,6 +123,10 @@ export default {
       default: null
     },
     disabledDates: {
+      type: Array | Object,
+      required: false
+    },
+    disabledDatesAndTimes: {
       type: Array | Object,
       required: false
     },

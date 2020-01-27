@@ -8,12 +8,12 @@
         @mouseup="handleMouseUp"
       >
         <li
-          v-for="clockItem in clockItemsDefault"
-          :key="`${clockItem}-clockItem`"
+          v-for="clockItem in clockFilteredItems"
+          :key="`${clockItem.point}-clockItem`"
           class="vmdtp_item minute-step_default"
-          :class="{disabled: isPointDisabled(clockItem)}"
+          :class="{disabled: clockItem.disabled}"
         >
-          {{ clockItem }}
+          {{ clockItem.point }}
         </li>
       </ul>
       <div class="vmdtp_center-point"></div>
@@ -54,6 +54,26 @@ export default {
       type: Number,
       required: false,
       default: 1
+    },
+    hourStep: {
+      type: Number,
+      default: 1
+    },
+    disabledDatesAndTimes: {
+      type: Array | Object,
+      required: false
+    },
+    selectedDay: {
+      type: Number,
+      required: true
+    },
+    selectedYear: {
+      type: Number,
+      required: true
+    },
+    selectedMoth: {
+      type: Number,
+      required: true
     }
   },
   data: () => ({
@@ -97,8 +117,13 @@ export default {
         const areHoursSet = this.hours !== null
         const areMinutesSet = v !== null
         return (areHoursSet && areMinutesSet)
-          ? this.$emit('update-can-finish', true)
-          : this.$emit('update-can-finish', false)
+          ? this.$emit('update-can-finish', false)
+          : this.$emit('update-can-finish', true)
+      }
+    },
+    isPressed: {
+      handler (v) {
+        return this.$emit('update-can-finish', !v)
       }
     }
   },
@@ -116,33 +141,47 @@ export default {
           this.minutes = 0
           this.$emit('minute', this.minutes)
         } else {
-          this.$emit('mode', this.MODE.MINUTE)
+          if (this.disabledDatesAndTimes) {
+            this.moveArrowToClosestPoint()
+            setTimeout(() => this.$emit('mode', this.MODE.MINUTE), 750)
+          } else {
+            this.$emit('mode', this.MODE.MINUTE)
+          }
+
+          // this.$emit('hour', this.hours)
         }
       } else {
         // move clock arrow to closest value
         if (this.minuteStep === 1) {
+          this.moveArrowToClosestPoint()
           this.$emit('minute', this.minutes)
         } else {
-          this.moveArrowToClosestMinute()
+          this.moveArrowToClosestPoint()
         }
       }
     },
-    moveArrowToClosestMinute () {
-      const clockItems = [...this.clockItems]
-      clockItems[clockItems.length - 1] = 60
-      this.minutes = this.findClosest(clockItems, this.minutes)
-      this.minutes = this.minutes === 60 ? 0 : this.minutes
+    moveArrowToClosestPoint () {
+      const clockItemsAsNumbers = [...this.enabledClockPoints].map(p => p.point)
+      if (this.isHourMode) {
+        this.hours = this.findClosest(clockItemsAsNumbers, this.hours)
+        this.degree = this.calcDegByHours(this.hours)
+      } else {
+        clockItemsAsNumbers[clockItemsAsNumbers.length - 1] = 60
+        this.minutes = this.findClosest(clockItemsAsNumbers, this.minutes)
+        this.minutes = this.minutes === 60 ? 0 : this.minutes
 
-      const minutesForDegreeCalculation = this.minutes === 0 ? 60 : this.minutes
-      this.degree = this.calcDegByMinutes(minutesForDegreeCalculation)
-    },
-    isPointDisabled (item) {
-      return !this.isHourMode && !this.clockItems.includes(item)
+        const minutesForDegreeCalculation = this.minutes === 0 ? 60 : this.minutes
+        this.degree = this.calcDegByMinutes(minutesForDegreeCalculation)
+      }
     },
     findClosest (arr, target) {
       return arr.reduce((prev, curr) => Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev)
     },
     handleMouseMove (event) {
+      if (event.offsetX > 250 || event.offsetY > 250) {
+        this.isPressed = false
+        return
+      }
       if (this.isPressed) {
         this.XC = event.offsetX
         this.YC = event.offsetY
@@ -155,6 +194,9 @@ export default {
     },
     calcDegByMinutes (minutes) {
       return ((minutes / 60) * 360)
+    },
+    calcDegByHours (hours) {
+      return ((hours) / 12) * 360
     },
     calculateDeg () {
       const XA = 125
@@ -182,25 +224,114 @@ export default {
     isHourMode () {
       return this.mode === this.MODE.HOUR
     },
-    clockItemsDefault () {
+    enabledClockPoints () {
       if (this.isHourMode) {
-        return Array.from({length: 12}, (v, k) => k + 1)
+        if (this.disabledHours) {
+          return this.defaultClockPoints.filter(clockItem => {
+            const hour = this.disabledHours.find(p => p.point === clockItem.point)
+            return !hour
+          })
+        }
+        const arr = Array.from({length: 12}, (v, k) => k + 1)
+        return arr.map(item => ({ disabled: false, point: item }))
       } else {
-        const arr = Array.from({ length: 12 }, (v, k) => k * 5)
-        arr.push(arr.shift())
-        return arr
-      }
-    },
-    clockItems () {
-      if (this.isHourMode) {
-        return Array.from({length: 12}, (v, k) => k + 1)
-      } else {
+        if (this.disabledMinutes) {
+          return this.defaultClockPoints.filter(clockItem => {
+            const minute = this.disabledMinutes.find(p => p.point === clockItem.point)
+            return !minute
+          })
+        }
         const arr = this.minuteStep !== 1 ? Array.from({
           length: Math.ceil((60 / this.minuteStep))
         }, (v, k) => k * this.minuteStep) : Array.from({ length: 12 }, (v, k) => k * 5)
         arr.push(arr.shift())
-        return arr
+        return arr.map(item => ({ disabled: false, point: item }))
       }
+    },
+    defaultClockPoints () {
+      if (this.isHourMode) {
+        const arr = Array.from({length: 12}, (v, k) => k + 1)
+        return arr.map(item => ({ disabled: false, point: item }))
+      } else {
+        const arr = Array.from({ length: 12 }, (v, k) => k * 5)
+        arr.push(arr.shift())
+        return arr.map(item => ({ disabled: false, point: item }))
+      }
+    },
+    clockFilteredItems () {
+      if (this.disabledDatesAndTimes) {
+        if (this.isHourMode) {
+          const arr = this.disabledHours.concat(this.enabledClockPoints).sort((a, b) => a.point - b.point)
+          // arr.push(arr.shift())
+          return arr
+        } else {
+          const arr = this.disabledMinutes.concat(this.enabledClockPoints).sort((a, b) => a.point - b.point)
+          arr.push(arr.shift())
+          return arr
+        }
+      }
+      return this.defaultClockPoints
+    },
+    disabledHours () {
+      if (!this.disabledDatesAndTimes) return
+      let hours = [...this.defaultClockPoints]
+      hours = hours.map(({ point }) => {
+        const hour = !this.isPm ? (point === 12 ? 0 : point) : point + 12
+        const date = new Date(this.selectedYear, this.selectedMoth, this.selectedDay, hour)
+        const isArray = Array.isArray(this.disabledDatesAndTimes)
+        const disabledDatesAndTimes = isArray ? this.disabledDatesAndTimes : [this.disabledDatesAndTimes]
+        const obj = {
+          point,
+          disabled: false
+        }
+        disabledDatesAndTimes.forEach(o => {
+          const toJSDate = o.to && new Date(o.to)
+          const fromJSDate = o.from && new Date(o.from)
+          if (o.to && !o.from && !obj.disabled) {
+            obj.disabled = !(toJSDate.getHours() <= date.getHours())
+          } else if (!o.to && o.from && !obj.disabled) {
+            obj.disabled = !(date.getHours() <= fromJSDate.getHours())
+          } else if (o.to && o.from && !obj.disabled) {
+            obj.disabled = (fromJSDate.getHours() <= date.getHours() && date.getHours() <= toJSDate.getHours())
+          } else if (!obj.disabled) {
+            obj.disabled = false
+          }
+        })
+        return obj
+      })
+      return hours.filter(h => h.disabled)
+    },
+    disabledMinutes () {
+      if (!this.disabledDatesAndTimes) return
+      let minutes = [...this.defaultClockPoints]
+      minutes = minutes.map(({ point }) => {
+        const hours = this.isPm ? this.hours + 12 : this.hours
+        const minutes = point === 60 ? 0 : point
+        const date = new Date(this.selectedYear, this.selectedMoth, this.selectedDay, hours, minutes)
+        const isArray = Array.isArray(this.disabledDatesAndTimes)
+        const disabledDatesAndTimes = isArray ? this.disabledDatesAndTimes : [this.disabledDatesAndTimes]
+        const obj = {
+          point,
+          disabled: false
+        }
+        disabledDatesAndTimes.forEach(o => {
+          const toJSDate = o.to && new Date(o.to)
+          const fromJSDate = o.from && new Date(o.from)
+          if (o.to && !o.from && !obj.disabled) {
+            console.log(toJSDate, date)
+            obj.disabled = !(toJSDate.getTime() <= date.getTime())
+          } else if (!o.to && o.from && !obj.disabled) {
+            obj.disabled = !(date.getTime() <= fromJSDate.getTime())
+          } else if (o.to && o.from && !obj.disabled) {
+            obj.disabled = (fromJSDate.getTime() <= date.getTime() && date.getTime() <= toJSDate.getTime())
+          } else if (!obj.disabled) {
+            obj.disabled = false
+          }
+        })
+        console.log(obj)
+        return obj
+      })
+      return minutes.filter(m => m.disabled)
     }
   }
 }

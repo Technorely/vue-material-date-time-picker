@@ -28,6 +28,9 @@
 
 <script>
 import Picker from './Picker.vue'
+import helpers from '../helpers/'
+console.log(helpers)
+
 export default {
   name: 'VueMaterialDateTimePicker',
   components: {
@@ -72,6 +75,24 @@ export default {
         return false
       }
     },
+    disabledDatesAndTimes: {
+      type: Array | Object,
+      required: false,
+      validator: v => {
+        const isArray = Array.isArray(v)
+        const isObject = typeof v === 'object'
+        if (isArray) {
+          return v.every(value => (value.hasOwnProperty('to') ||
+            value.hasOwnProperty('from')) &&
+            (value.to && Date.parse(value.to)) ||
+            (value.from && Date.parse(value.from)))
+        } else if (isObject) {
+          return (v.hasOwnProperty('to') || v.hasOwnProperty('from')) && (v.to && Date.parse(v.to)) ||
+            (v.from && Date.parse(v.to))
+        }
+        return false
+      }
+    },
     minuteStep: {
       type: Number,
       required: false,
@@ -89,42 +110,26 @@ export default {
   }),
   computed: {
     parsedDisabledDates () {
-      if (this.disabledDates && Array.isArray(this.disabledDates)) {
-        const dates = [ ...this.disabledDates ]
-        return dates.map(d => {
-          Object.keys(d).forEach(k => {
-            let date = new Date(d[k])
-            d[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate())
-          })
-          return d
+      if (!this.disabledDates) return []
+      const dates = Array.isArray(this.disabledDates) ? this.disabledDates : [this.disabledDates]
+      return dates.map(d => {
+        Object.keys(d).forEach(k => {
+          let date = new Date(d[k])
+          d[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate())
         })
-      } else if (this.disabledDates) {
-        const dates = { ...this.disabledDates }
-        Object.keys(dates).forEach(k => {
-          let date = new Date(dates[k])
-          dates[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate())
-        })
-        return dates
-      }
+        return d
+      })
     },
     parsedDisabledDatesAndTimes () {
-      if (this.disabledDates && Array.isArray(this.disabledDates)) {
-        const dates = [ ...this.disabledDates ]
-        return dates.map(d => {
-          Object.keys(d).forEach(k => {
-            let date = new Date(d[k])
-            d[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())
-          })
-          return d
+      if (!this.disabledDatesAndTimes) return []
+      const dates = Array.isArray(this.disabledDatesAndTimes) ? this.disabledDatesAndTimes : [this.disabledDatesAndTimes]
+      return dates.map(d => {
+        Object.keys(d).forEach(k => {
+          let date = new Date(d[k])
+          d[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())
         })
-      } else if (this.disabledDates) {
-        const dates = { ...this.disabledDates }
-        Object.keys(dates).forEach(k => {
-          let date = new Date(dates[k])
-          dates[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())
-        })
-        return dates
-      }
+        return d
+      })
     },
     listeners () {
       return {

@@ -31,7 +31,7 @@
     <section>
       <h3><b>DateTimePicker disabled date and time</b></h3>
       <div>
-        <VueMaterialDateTimePicker :disabled-dates="disabledDatesAndTime" v-model="dateAndTime"  />
+        <VueMaterialDateTimePicker :disabled-dates-and-times="disabledDatesAndTime" v-model="dateAndTime"  />
       </div>
     </section>
     <section>
@@ -44,21 +44,21 @@
       </code>
       <code>
         disabledDates: [
-        {
-        from: new Date(),
-        to: new Date(2020, 0, 25)
-        },
-        {
-        from: new Date(2020, 0, 28),
-        to: new Date(2020, 0, 30)
-        }
+          {
+          from: new Date(),
+          to: new Date(2020, 0, 25)
+          },
+          {
+          from: new Date(2020, 0, 28),
+          to: new Date(2020, 0, 30)
+          }
         ]
       </code>
     </section>
     <section>
       <h3><b>DateTimePicker minute step</b></h3>
       <div>
-        <VueMaterialDateTimePicker :minute-step="minuteStep" v-model="dateAndTime"  />
+        <VueMaterialDateTimePicker :minute-step="minuteStep" :disabled-dates-and-times="disabledDatesAndTime" v-model="dateAndTime"  />
       </div>
     </section>
   </main>

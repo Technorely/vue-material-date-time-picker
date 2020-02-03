@@ -29,6 +29,12 @@
       </code>
     </section>
     <section>
+      <h3><b>DateTimePicker disabled date and time</b></h3>
+      <div>
+        <VueMaterialDateTimePicker :disabled-dates-and-times="disabledDatesAndTime" v-model="dateAndTime"  />
+      </div>
+    </section>
+    <section>
       <h3><b>DateTimePicker</b> disabled dates</h3>
       <div>
         <VueMaterialDateTimePicker v-model="dateOnly" :disabled-dates="disabledDates" :is-date-only="true" />
@@ -38,21 +44,21 @@
       </code>
       <code>
         disabledDates: [
-        {
-        from: new Date(),
-        to: new Date(2020, 0, 25)
-        },
-        {
-        from: new Date(2020, 0, 28),
-        to: new Date(2020, 0, 30)
-        }
+          {
+          from: new Date(),
+          to: new Date(2020, 0, 25)
+          },
+          {
+          from: new Date(2020, 0, 28),
+          to: new Date(2020, 0, 30)
+          }
         ]
       </code>
     </section>
     <section>
       <h3><b>DateTimePicker minute step</b></h3>
       <div>
-        <VueMaterialDateTimePicker :minute-step="minuteStep" v-model="dateAndTime"  />
+        <VueMaterialDateTimePicker :minute-step="minuteStep" :disabled-dates-and-times="disabledDatesAndTime" v-model="dateAndTime"  />
       </div>
     </section>
   </main>
@@ -70,6 +76,9 @@ export default {
     dateOnly: null,
     timeOnly: null,
     dateAndTime: null,
+    disabledDatesAndTime: {
+      to: new Date()
+    },
     disabledDates: [
       {
         from: '2020-01-22T19:56:54.766Z',

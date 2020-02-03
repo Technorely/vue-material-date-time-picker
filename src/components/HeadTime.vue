@@ -7,7 +7,7 @@
     >{{ hour }}</span>
     <span class="vmdtp_text">:</span>
     <span
-      :class="{active: mode === 4}"
+      :class="{active: mode === 4, disabled: isOnlyHour}"
       class="vmdtp_text vmdtp_text--pointer"
       @click.prevent="$emit('modeUpdate', MODE.MINUTE)"
     >{{ minute }}</span>
@@ -28,6 +28,11 @@ export default {
     minutes: {
       type: Number | Object,
       required: true
+    },
+    isOnlyHour: {
+      type: Boolean,
+      default: false,
+      required: false
     },
     isPm: {
       type: Boolean,
@@ -64,7 +69,7 @@ export default {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
-  background-color: $c-blue;
+  background-color: $c-blue-darken;
   color: $c-white;
   padding: 16px;
 }
@@ -82,6 +87,10 @@ export default {
   }
   &--pointer {
     cursor: pointer;
+    &.disabled {
+      pointer-events: none;
+      cursor: not-allowed;
+    }
   }
   &--sm {
     margin-left: 8px;

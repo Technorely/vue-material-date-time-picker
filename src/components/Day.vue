@@ -56,6 +56,10 @@ export default {
     disabledDates: {
       type: Array | Object,
       required: false
+    },
+    disabledDatesAndTimes: {
+      type: Array | Object,
+      required: false
     }
   },
   methods: {
@@ -65,53 +69,31 @@ export default {
   },
   computed: {
     days () {
+      const disabled = this.disabledDates.length > 0 ? this.disabledDates : this.disabledDatesAndTimes
       const prevMonthDays = new Array(this.position).fill(null)
       const monthDays = Array.from({length: this.number}, (v, k) => k + 1)
 
-      const isArray = Array.isArray(this.disabledDates)
       let filteredDates
       const dates = [...prevMonthDays, ...monthDays]
 
-      if (isArray) {
-        filteredDates = dates.map(v => {
-          let obj = { day: v }
-          const dayDate = new Date(this.selectedYear, this.selectedMoth, v)
-          this.disabledDates.forEach(o => {
-            const toJSDate = o.to && new Date(o.to)
-            const fromJSDate = o.from && new Date(o.from)
-            if (o.to && !o.from && !obj.disabled) {
-              obj.disabled = !(toJSDate.getTime() <= dayDate.getTime())
-            } else if (!o.to && o.from && !obj.disabled) {
-              obj.disabled = !(dayDate.getTime() <= fromJSDate.getTime())
-            } else if (o.to && o.from && !obj.disabled) {
-              obj.disabled = (fromJSDate.getTime() <= dayDate.getTime() && dayDate.getTime() <= toJSDate.getTime())
-            } else if (!obj.disabled) {
-              obj.disabled = false
-            }
-          })
-          return obj
-        })
-      } else {
-        const { from = null, to = null } = this.disabledDates || {}
-
-        const toJSDate = to && new Date(to)
-        const fromJSDate = from && new Date(from)
-
-        filteredDates = dates.map(v => {
-          let obj = { day: v, disabled: false }
-          const dayDate = new Date(this.selectedYear, this.selectedMoth, v)
-          if (to && !from) {
+      filteredDates = dates.map(v => {
+        let obj = { day: v }
+        const dayDate = new Date(this.selectedYear, this.selectedMoth, v)
+        disabled.forEach(o => {
+          const toJSDate = o.to && new Date(o.to)
+          const fromJSDate = o.from && new Date(o.from)
+          if (o.to && !o.from && !obj.disabled) {
             obj.disabled = !(toJSDate.getTime() <= dayDate.getTime())
-          } else if (!to && from) {
+          } else if (!o.to && o.from && !obj.disabled) {
             obj.disabled = !(dayDate.getTime() <= fromJSDate.getTime())
-          } else if (to && from) {
+          } else if (o.to && o.from && !obj.disabled) {
             obj.disabled = (fromJSDate.getTime() <= dayDate.getTime() && dayDate.getTime() <= toJSDate.getTime())
-          } else {
+          } else if (!obj.disabled) {
             obj.disabled = false
           }
-          return obj
         })
-      }
+        return obj
+      })
 
       return filteredDates
     }
@@ -187,7 +169,7 @@ export default {
         background-color: rgba($c-black, 0.1);
       }
       &.selected {
-        background-color: $c-blue;
+        background-color: $c-blue-darken;
         color: $c-white;
       }
     }

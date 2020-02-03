@@ -40,7 +40,7 @@ export default {
 @import "../assets/css/var";
 
 .vmdtp_header {
-  background-color: $c-blue;
+  background-color: $c-blue-darken;
   color: $c-white;
   padding: 16px;
 }

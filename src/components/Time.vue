@@ -339,6 +339,17 @@ export default {
         disabledDatesAndTimes: this.disabledDatesAndTimes,
         timePoints: this.realHours
       }
+      // const disabledHours = helpers.createDisabledTimesArray(params)
+      // const filterParams = {
+      //   isPm: this.isPm,
+      //   year: this.selectedYear,
+      //   month: this.selectedMoth,
+      //   day: this.selectedDay,
+      //   disabledDatesAndTimes: this.disabledDatesAndTimes,
+      //   hours: disabledHours,
+      //   minutes: this.disabledMinutes
+      // }
+      // const filteredDisabledHours = helpers.checkForEnabledMinutesInHours(filterParams)
       return helpers.createDisabledTimesArray(params)
     },
     disabledMinutes () {

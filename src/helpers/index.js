@@ -49,6 +49,15 @@ export default (function () {
       }
       return times.reduce(reducer, [])
     },
+    // checkForEnabledMinutesInHours ({ isPm, year, month, day, hours, minutes, disabledDatesAndTimes }) {
+    //   return hours.map(h => {
+    //     const hour = isPm ? (h.point + 12 === 24 ? 12 : h.point + 12) : (h.point + 12 === 12 ? 0 : h.point)
+    //     minutes.forEach(m => {
+    //       const date = new Date(year, month, day, hour, m.point)
+    //       // const isDisabledHour = disabledDatesAndTimes.find()
+    //     })
+    //   })
+    // },
     compareHours (disabledTimeEntries, obj, date) {
       disabledTimeEntries.forEach(({ to = null, from = null }) => {
         const toJSDate = to && new Date(to)

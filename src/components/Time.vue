@@ -8,36 +8,42 @@
         @mouseup="handleMouseUp"
       >
         <li
-          v-for="clockItem in clockItemsDefault"
-          :key="`${clockItem}-clockItem`"
+          v-for="time in templateTimePoints"
+          :key="`${time.point}-clockItem`"
           class="vmdtp_item minute-step_default"
-          :class="{disabled: isPointDisabled(clockItem)}"
+          :class="{ disabled: time.disabled }"
         >
-          {{ clockItem }}
+          {{ time.point }}
         </li>
       </ul>
       <div class="vmdtp_center-point"></div>
       <div
         class="vmdtp_arrow"
-        :class="{pressed: isPressed}"
-        :style="{transform: `rotate(${degree}deg)`}"
+        :class="{ pressed: isPressed }"
+        :style="{ transform: `rotate(${degree}deg)` }"
       ></div>
       <button
+        :disabled="!isEnabledAM"
         class="vmdtp_button vmdtp_button--left"
-        :class="{active: !isPm}"
+        :class="{ active: !isPm }"
         @click.prevent="handlePmChange(false)"
-      >AM</button>
+      >
+        AM
+      </button>
       <button
         class="vmdtp_button vmdtp_button--right"
-        :class="{active: isPm}"
+        :class="{ active: isPm }"
         @click.prevent="handlePmChange(true)"
-      >PM</button>
+      >
+        PM
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import { MODE } from '../constants'
+import helpers from '../helpers/'
 
 export default {
   name: 'Time',
@@ -53,8 +59,27 @@ export default {
     minuteStep: {
       type: Number,
       required: false,
-      default: 1,
-      validator: v => [1, 5, 15, 30, 60].includes(v)
+      default: 1
+    },
+    hourStep: {
+      type: Number,
+      default: 1
+    },
+    disabledDatesAndTimes: {
+      type: Array | Object,
+      required: false
+    },
+    selectedDay: {
+      type: Number,
+      required: true
+    },
+    selectedYear: {
+      type: Number,
+      required: true
+    },
+    selectedMoth: {
+      type: Number,
+      required: true
     }
   },
   data: () => ({
@@ -67,15 +92,37 @@ export default {
     minutes: null
   }),
   watch: {
-    degree (v) {
-      if (this.isHourMode) {
-        this.hours = Math.floor(v / 30)
-        this.$emit('hour', this.hours)
+    isHourMode: {
+      immediate: true,
+      handler (v) {
+        if (v) this.hours ? this.$emit('hour', this.hours) : this.findInitialPoint()
       }
-      if (!this.isHourMode) {
-        const rounded = Math.round(v / 6)
-        this.minutes = rounded !== 60 ? rounded : 0
-        this.$emit('minute', this.minutes)
+    },
+    degree: {
+      immediate: true,
+      handler (v) {
+        if (this.isHourMode) {
+          const hours = Math.round(v / 30)
+          if (this.isPm) {
+            if (hours === 0) {
+              this.hours = helpers.isHourDisabled(12, this.allHours) ? this.moveArrowToClosestPoint() : 12
+            } else {
+              this.hours = helpers.isHourDisabled(hours, this.allHours) ? this.moveArrowToClosestPoint() : hours
+            }
+          } else {
+            this.hours = hours === 12 ? 0 : hours
+          }
+          this.$emit('hour', this.hours)
+        } else {
+          const rounded = Math.round(v / 6)
+          const minutes = rounded !== 60 ? rounded : 0
+          if (!minutes) {
+            this.minutes = helpers.isMinuteDisabled(minutes, this.allMinutes) ? this.moveArrowToClosestPoint() : minutes
+          } else {
+            this.minutes = minutes
+          }
+          this.$emit('minute', this.minutes)
+        }
       }
     },
     mode (v) {
@@ -86,10 +133,8 @@ export default {
       immediate: true,
       handler (v) {
         const areHoursSet = v !== null
-        const areMinutesSet = this.minutes !== null
-        return (areHoursSet && areMinutesSet)
-          ? this.$emit('update-can-finish', true)
-          : this.$emit('update-can-finish', false)
+        const areMinutesSet = !!this.minutes
+        return areHoursSet && areMinutesSet ? this.$emit('update-can-finish', true) : this.$emit('update-can-finish', false)
       }
     },
     minutes: {
@@ -97,11 +142,31 @@ export default {
       handler (v) {
         const areHoursSet = this.hours !== null
         const areMinutesSet = v !== null
-        return (areHoursSet && areMinutesSet)
-          ? this.$emit('update-can-finish', true)
-          : this.$emit('update-can-finish', false)
+        return areHoursSet && areMinutesSet
+          ? this.$emit('update-can-finish', false)
+          : this.$emit('update-can-finish', true)
+      }
+    },
+    isPressed: {
+      handler (v) {
+        return this.$emit('update-can-finish', !v)
+      }
+    },
+    isPm: {
+      handler (v) {
+        this.hours = v
+          ? this.hours === 0
+            ? 12
+            : this.hours
+          : this.hours === 12
+          ? 0
+          : this.hours
+        this.$emit('hour', this.hours)
       }
     }
+  },
+  mounted () {
+    this.$emit('minute', 0)
   },
   methods: {
     handleMouseDown (event) {
@@ -117,33 +182,66 @@ export default {
           this.minutes = 0
           this.$emit('minute', this.minutes)
         } else {
-          this.$emit('mode', this.MODE.MINUTE)
+          if (this.disabledDatesAndTimes) {
+            this.moveArrowToClosestPoint()
+            setTimeout(() => this.$emit('mode', this.MODE.MINUTE), 750)
+          } else {
+            this.$emit('mode', this.MODE.MINUTE)
+          }
+
+          // this.$emit('hour', this.hours)
         }
       } else {
         // move clock arrow to closest value
         if (this.minuteStep === 1) {
-          this.$emit('minute', this.minutes)
+          if (this.minutes === 0) {
+            this.$emit('minute', this.minutes)
+          } else {
+            this.moveArrowToClosestPoint()
+            this.$emit('minute', this.minutes)
+          }
         } else {
-          this.moveArrowToClosestMinute()
+          this.moveArrowToClosestPoint()
         }
       }
     },
-    moveArrowToClosestMinute () {
-      const clockItems = [...this.clockItems]
-      clockItems[clockItems.length - 1] = 60
-      this.minutes = this.findClosest(clockItems, this.minutes)
-      this.minutes = this.minutes === 60 ? 0 : this.minutes
-
-      const minutesForDegreeCalculation = this.minutes === 0 ? 60 : this.minutes
-      this.degree = this.calcDegByMinutes(minutesForDegreeCalculation)
+    findInitialPoint () {
+      const time = this.allHours[this.allHours.length - 1]
+      const { disabled } = time
+      this.disabledDatesAndTimes ? (disabled ? this.moveArrowToClosestPoint() : this.hours = time.point) : this.hours = time.point
     },
-    isPointDisabled (item) {
-      return !this.isHourMode && !this.clockItems.includes(item)
+    moveArrowToClosestPoint () {
+      const clockItemsAsNumbers = [...this.enabledPoints].map(p => p.point)
+      if (this.isHourMode) {
+        const hours = this.findClosest(clockItemsAsNumbers, this.hours)
+        this.hours = this.isPm
+          ? hours === 0
+            ? 12
+            : hours
+          : hours === 12
+          ? 0
+          : hours
+        this.degree = this.calcDegByHours(this.hours)
+      } else {
+        clockItemsAsNumbers.push(60)
+        this.minutes = this.findClosest(clockItemsAsNumbers, this.minutes)
+        this.minutes = this.minutes === 60 ? 0 : this.minutes
+
+        const minutesForDegreeCalculation =
+          this.minutes === 0 ? 60 : this.minutes
+        this.degree = this.calcDegByMinutes(minutesForDegreeCalculation)
+      }
     },
     findClosest (arr, target) {
-      return arr.reduce((prev, curr) => Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev)
+      return arr.reduce((prev, curr) =>
+        Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev
+      )
     },
     handleMouseMove (event) {
+      if (event.offsetX > 250 || event.offsetY > 250) {
+        this.isPressed = false
+        return
+      }
       if (this.isPressed) {
         this.XC = event.offsetX
         this.YC = event.offsetY
@@ -155,7 +253,10 @@ export default {
       this.$emit('hour', this.hours)
     },
     calcDegByMinutes (minutes) {
-      return ((minutes / 60) * 360)
+      return (minutes / 60) * 360
+    },
+    calcDegByHours (hours) {
+      return (hours / 12) * 360
     },
     calculateDeg () {
       const XA = 125
@@ -166,40 +267,175 @@ export default {
       const YC = this.YC
       const vectorAB = [XB - XA, YB - YA]
       const vectorAC = [XC - XA, YC - YA]
-      const fractionUpperPart = (vectorAB[0] * vectorAC[0]) + (vectorAB[1] * vectorAC[1])
-      const fractionLowerPart0 = Math.pow(vectorAB[0], 2) + Math.pow(vectorAB[1], 2)
-      const fractionLowerPart1 = Math.pow(vectorAC[0], 2) + Math.pow(vectorAC[1], 2)
-      const fractionLowerPart = Math.sqrt(fractionLowerPart0) * Math.sqrt(fractionLowerPart1)
+      const fractionUpperPart =
+        vectorAB[0] * vectorAC[0] + vectorAB[1] * vectorAC[1]
+      const fractionLowerPart0 =
+        Math.pow(vectorAB[0], 2) + Math.pow(vectorAB[1], 2)
+      const fractionLowerPart1 =
+        Math.pow(vectorAC[0], 2) + Math.pow(vectorAC[1], 2)
+      const fractionLowerPart =
+        Math.sqrt(fractionLowerPart0) * Math.sqrt(fractionLowerPart1)
       const arcCosARadians = Math.acos(fractionUpperPart / fractionLowerPart)
       const xRight = XC >= 0 && XC < 125
       const xLeft = XC >= 125 && XC <= 250
       const yTop = YC >= 0 && YC < 125
       const yBottom = YC >= 125 && YC <= 250
-      if (xLeft && (yTop || yBottom)) this.degree = Math.floor((180 / Math.PI) * arcCosARadians)
-      if (xRight && (yTop || yBottom)) this.degree = 360 - Math.floor((180 / Math.PI) * arcCosARadians)
+      if (xLeft && (yTop || yBottom)) {
+        this.degree = Math.floor((180 / Math.PI) * arcCosARadians)
+      }
+      if (xRight && (yTop || yBottom)) {
+        this.degree = 360 - Math.floor((180 / Math.PI) * arcCosARadians)
+      }
     }
   },
   computed: {
     isHourMode () {
       return this.mode === this.MODE.HOUR
     },
-    clockItemsDefault () {
-      if (this.isHourMode) {
-        return Array.from({length: 12}, (v, k) => k + 1)
+    realMinutes () {
+      const minutes = helpers.createReal60MinutesArray()
+      const params = {
+        forHours: false,
+        isPm: this.isPm,
+        year: this.selectedYear,
+        month: this.selectedMoth,
+        day: this.selectedDay,
+        hours: this.hours,
+        disabledDatesAndTimes: this.disabledDatesAndTimes,
+        timePoints: minutes
+      }
+
+      if (this.minuteStep >= 5) {
+        const disabled = this.disabledDatesAndTimes.length > 0 ? helpers.createDisabledTimesArray(params) : []
+        const stepsParams = {
+          minutes: minutes,
+          step: this.minuteStep,
+          disabledMinutes: disabled
+        }
+        return helpers.filterMinutesWithSteps(stepsParams)
       } else {
-        const arr = Array.from({ length: 12 }, (v, k) => k * 5)
-        arr.push(arr.shift())
-        return arr
+        return minutes
       }
     },
-    clockItems () {
-      if (this.isHourMode) {
-        return Array.from({length: 12}, (v, k) => k + 1)
+    realHours () {
+      if (this.isPm) {
+        const arr = Array.from({ length: 12 }, (v, k) => k + 1)
+        return arr.map(item => ({ disabled: false, point: item }))
       } else {
-        const arr = this.minuteStep !== 1 ? Array.from({length: 60 / this.minuteStep}, (v, k) => k * this.minuteStep) : Array.from({ length: 12 }, (v, k) => k * 5)
+        const arr = Array.from({ length: 12 }, (v, k) => k)
         arr.push(arr.shift())
-        return arr
+        return arr.map(item => ({ disabled: false, point: item }))
       }
+    },
+    disabledHours () {
+      if (!this.disabledDatesAndTimes) return []
+      const params = {
+        forHours: true,
+        isPm: this.isPm,
+        year: this.selectedYear,
+        month: this.selectedMoth,
+        day: this.selectedDay,
+        hours: null,
+        disabledDatesAndTimes: this.disabledDatesAndTimes,
+        timePoints: this.realHours
+      }
+      // const disabledHours = helpers.createDisabledTimesArray(params)
+      // const filterParams = {
+      //   isPm: this.isPm,
+      //   year: this.selectedYear,
+      //   month: this.selectedMoth,
+      //   day: this.selectedDay,
+      //   disabledDatesAndTimes: this.disabledDatesAndTimes,
+      //   hours: disabledHours,
+      //   minutes: this.disabledMinutes
+      // }
+      // const filteredDisabledHours = helpers.checkForEnabledMinutesInHours(filterParams)
+      return helpers.createDisabledTimesArray(params)
+    },
+    disabledMinutes () {
+      if (!this.disabledDatesAndTimes) return []
+      const params = {
+        forHours: false,
+        isPm: this.isPm,
+        year: this.selectedYear,
+        month: this.selectedMoth,
+        day: this.selectedDay,
+        hours: this.hours,
+        disabledDatesAndTimes: this.disabledDatesAndTimes,
+        timePoints: this.realMinutes
+      }
+      return helpers.createDisabledTimesArray(params)
+    },
+    allHours () {
+      const hours = this.realHours.map(h =>
+        this.disabledHours.find(k => k && k.point === h.point)
+          ? this.disabledHours.find(k => k.point === h.point)
+          : h
+      )
+      return hours
+    },
+    allMinutes () {
+      const minutes = this.realMinutes.map(h =>
+        this.disabledMinutes.find(k => k && k.point === h.point)
+          ? this.disabledMinutes.find(k => k.point === h.point)
+          : h
+      )
+      return minutes
+    },
+    enabledHours () {
+      return this.disabledHours.length > 0
+        ? this.allHours.filter(h => !h.disabled)
+        : this.allHours
+    },
+    enabledMinutes () {
+      return this.disabledMinutes.length > 0
+        ? this.allMinutes.filter(h => !h.disabled)
+        : this.allMinutes.filter(h => !h.disabled)
+    },
+    templateTimePoints () {
+      if (this.isHourMode) {
+        return this.allHours
+      } else {
+        return this.allMinutes.filter(m => m.point % 5 === 0)
+      }
+    },
+    enabledPoints () {
+      return this.isHourMode ? this.enabledHours : this.enabledMinutes
+    },
+    isEnabledAMFormatForHours () {
+      if (!this.disabledDatesAndTimes) return true
+      const params = {
+        forHours: true,
+        isPm: false,
+        year: this.selectedYear,
+        month: this.selectedMoth,
+        day: this.selectedDay,
+        hours: null,
+        disabledDatesAndTimes: this.disabledDatesAndTimes,
+        timePoints: this.realHours
+      }
+      const hours = helpers.createDisabledTimesArray(params)
+      return hours.length < 12
+    },
+    isEnabledAMFormatForMinutes () {
+      if (!this.disabledDatesAndTimes) return true
+      const params = {
+        forHours: false,
+        isPm: false,
+        year: this.selectedYear,
+        month: this.selectedMoth,
+        day: this.selectedDay,
+        hours: this.hours,
+        disabledDatesAndTimes: this.disabledDatesAndTimes,
+        timePoints: this.realMinutes
+      }
+      const minutes = helpers.createDisabledTimesArray(params)
+      return minutes.length < 60
+    },
+    isEnabledAM () {
+      return this.isHourMode
+        ? this.isEnabledAMFormatForHours
+        : this.isEnabledAMFormatForMinutes
     }
   }
 }
@@ -225,7 +461,7 @@ export default {
   background-color: $c-gray;
   .vmdtp_center-point {
     position: absolute;
-    z-index: 10;
+    z-index: 100;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -237,28 +473,28 @@ export default {
   .vmdtp_arrow {
     pointer-events: none;
     height: calc(50% - 36px);
-    width: 4px;
+    width: 3px;
     bottom: 50%;
     left: calc(50% - 2px);
     transform-origin: center bottom;
     position: absolute;
-    z-index: 10;
+    z-index: 100;
     background-color: rgba($c-blue, 0.75);
-    transition: all 0.75s ease-in-out;
+    transition: all 0.75s cubic-bezier(0.19, 1, 0.22, 1);
     &.pressed {
       transition: none;
     }
     &:before {
       display: block;
-      content: '';
+      content: "";
       position: absolute;
       left: -15px;
       top: -32px;
-      z-index: 10;
+      z-index: 100;
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background-color: rgba($c-blue, 0.75);
+      background-color: rgba($c-blue, 0.3);
       cursor: grab;
     }
   }
@@ -273,7 +509,7 @@ export default {
     margin: 0;
     list-style: none;
     border-radius: 50%;
-    background-color: transparent;
+    background-color: $c-white;
   }
   .vmdtp_item {
     pointer-events: none;
@@ -289,28 +525,53 @@ export default {
     align-items: center;
     justify-content: center;
     font-family: sans-serif;
-    font-size: 24px;
+    font-size: 17px;
     font-weight: 500;
     transform: translate(-50%, -50%);
     color: $c-black;
+    background-color: rgba($c-blue, 0.6);
     border-radius: 50%;
     &.disabled {
       color: $c-gray-darken;
       opacity: 0.8;
     }
     &.minute-step_default {
-      &:nth-child(1) { transform: translate(135%, -345%) }
-      &:nth-child(2) { transform: translate(255%, -220%) }
-      &:nth-child(3) { transform: translate(300%, -50%) }
-      &:nth-child(4) { transform: translate(255%, 135%) }
-      &:nth-child(5) { transform: translate(130%, 255%) }
-      &:nth-child(6) { transform: translate(-50%, 300%) }
-      &:nth-child(7) { transform: translate(-235%, 250%) }
-      &:nth-child(8) { transform: translate(-350%, 130%) }
-      &:nth-child(9) { transform: translate(-400%, -50%) }
-      &:nth-child(10) { transform: translate(-345%, -230%) }
-      &:nth-child(11) { transform: translate(-220%, -350%) }
-      &:nth-child(12) { transform: translate(-50%, -400%) }
+      &:nth-child(1) {
+        transform: translate(135%, -345%);
+      }
+      &:nth-child(2) {
+        transform: translate(255%, -220%);
+      }
+      &:nth-child(3) {
+        transform: translate(300%, -50%);
+      }
+      &:nth-child(4) {
+        transform: translate(255%, 135%);
+      }
+      &:nth-child(5) {
+        transform: translate(130%, 255%);
+      }
+      &:nth-child(6) {
+        transform: translate(-50%, 300%);
+      }
+      &:nth-child(7) {
+        transform: translate(-235%, 250%);
+      }
+      &:nth-child(8) {
+        transform: translate(-350%, 130%);
+      }
+      &:nth-child(9) {
+        transform: translate(-400%, -50%);
+      }
+      &:nth-child(10) {
+        transform: translate(-345%, -230%);
+      }
+      &:nth-child(11) {
+        transform: translate(-220%, -350%);
+      }
+      &:nth-child(12) {
+        transform: translate(-50%, -400%);
+      }
     }
   }
 }
@@ -344,7 +605,7 @@ export default {
     right: 0;
   }
   &.active {
-    background-color: $c-blue;
+    background-color: $c-blue-darken;
     color: $c-white;
   }
 }

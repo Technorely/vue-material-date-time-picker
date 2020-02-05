@@ -21,6 +21,7 @@
         v-else
         :hours="hour"
         :minutes="minute"
+        :is-only-hour="onlyHour"
         :is-pm="pm"
         :mode="mode"
         @modeUpdate="handleModeUpdateFromTimeHeader"
@@ -50,6 +51,7 @@
         :selected-year="year"
         :selected-moth="month"
         :disabled-dates="disabledDates"
+        :disabled-dates-and-times="disabledDatesAndTimes"
         :number="getNumberOfDaysInMonth"
         :position="firstDayOfMonthPosition"
         :name="weekDaysShortNamesSet"
@@ -57,9 +59,13 @@
         @day="setDay"
       />
       <Time
-        v-show="mode === 3 || mode === 4"
+        v-if="mode === 3 || mode === 4"
         :mode="mode"
         :is-pm="pm"
+        :selected-year="year"
+        :selected-moth="month"
+        :selected-day="date"
+        :disabled-dates-and-times="disabledDatesAndTimes"
         :minute-step="minuteStep"
         @mode="setMode"
         @hour="setHour"
@@ -114,7 +120,7 @@ export default {
       default: false
     },
     definedDate: {
-      type: Date,
+      type: Date | String,
       required: false,
       default: null
     },
@@ -122,11 +128,14 @@ export default {
       type: Array | Object,
       required: false
     },
+    disabledDatesAndTimes: {
+      type: Array | Object,
+      required: false
+    },
     minuteStep: {
       type: Number,
       required: false,
-      default: 1,
-      validator: v => [1, 5, 15, 30, 60].includes(v)
+      default: 1
     }
   },
   data: () => ({
@@ -206,7 +215,7 @@ export default {
       } else if (!this.isDateOnly && this.mode === 2) {
         this.mode++
       } else {
-        const hours = this.pm ? this.hour + 12 : this.hour
+        const hours = this.pm ? (this.hour + 12 === 24 ? 12 : this.hour + 12) : (this.hour + 12 === 12 ? 0 : this.hour)
         const date = new Date(
           this.year,
           this.month,
@@ -282,6 +291,9 @@ export default {
     },
     weekDaysShortNamesSet () {
       return Object.values(this.WEEK_SET).map(i => i.substring(0, 1).toUpperCase())
+    },
+    onlyHour () {
+      return this.minuteStep === 60
     }
   },
   created () {

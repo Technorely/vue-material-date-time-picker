@@ -89,7 +89,7 @@ export default {
         to: new Date(2020, 0, 30)
       }
     ],
-    minuteStep: 15
+    minuteStep: 60
   })
 }
 </script>

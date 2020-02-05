@@ -120,7 +120,7 @@ export default {
       default: false
     },
     definedDate: {
-      type: Date,
+      type: Date | String,
       required: false,
       default: null
     },

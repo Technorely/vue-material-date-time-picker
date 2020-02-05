@@ -11,7 +11,7 @@ NB. Vue 1.x is not supported.
 
 ## Demo
 
-To view a demo online:
+To view a demo online: https://codesandbox.io/s/vue-materialdatetimepicker-demo-gs52h
 
 To view demo examples locally clone the repo and run `npm install && npm run serve` or `yarn && yarn serve`
 

@@ -28,8 +28,7 @@
 
 <script>
 import Picker from './Picker.vue'
-import helpers from '../helpers/'
-console.log(helpers)
+import helpers from '../helpers'
 
 export default {
   name: 'VueMaterialDateTimePicker',

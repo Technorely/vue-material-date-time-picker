@@ -1,15 +1,15 @@
 <template>
   <label class="vmdtp_label">
-    <input
-      v-bind="$attrs"
-      :value="displayedValue"
-      v-on="listeners"
-      :disabled="isPickerShown"
-      ref="input"
-      class="vmdtp_input"
-      @click.prevent="handleClick"
-      @keypress.enter="isPickerShown = true"
-    >
+    <slot :attrs="{...$attrs, value: displayedValue, disabled: isPickerShown}" :on="listeners">
+      <input
+        v-bind="$attrs"
+        :value="displayedValue"
+        v-on="listeners"
+        :disabled="isPickerShown"
+        ref="input"
+        class="vmdtp_input"
+      >
+    </slot>
     <transition>
       <Picker
         v-if="isPickerShown"
@@ -134,7 +134,16 @@ export default {
     listeners () {
       return {
         ...this.$listeners,
-        input: event => this.$emit('input', event)
+        input: event => this.$emit('input', event),
+        click: event => {
+          e.preventDefault();
+          this.handleClick();
+        },
+        keypress: event => {
+          if (event.key === 'Enter') {
+            this.isPickerShown = true;
+          }
+        }
       }
     },
     displayedValue () {

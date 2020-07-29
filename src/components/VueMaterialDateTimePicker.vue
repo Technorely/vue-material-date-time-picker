@@ -136,7 +136,7 @@ export default {
         ...this.$listeners,
         input: event => this.$emit('input', event),
         click: event => {
-          e.preventDefault();
+          event.preventDefault();
           this.handleClick();
         },
         keypress: event => {
